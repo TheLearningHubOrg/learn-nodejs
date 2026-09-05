@@ -1,3 +1,12 @@
+# [2.1.0](https://github.com/manthanank/learn-nodejs/compare/v0.4.0...v2.1.0) (2026-09-05)
+
+
+### Features
+
+* modernize curriculum, runtime diagnostics, and CI/CD workflows ([7f3b408](https://github.com/manthanank/learn-nodejs/commit/7f3b408a41de19f74d8f5c7196536a26e62519af))
+
+
+
 # [0.4.0](https://github.com/manthanank/learn-nodejs/compare/v0.3.0...v0.4.0) (2025-02-01)
 
 
