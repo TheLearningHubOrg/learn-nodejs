@@ -1,4 +1,4 @@
-# Enterprise Node.js 20/22 LTS Masterclass & Production Architecture Guide
+# Learn Node.js: The Complete Beginner-to-Expert Masterclass
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-20.x%20%7C%2022.x%20LTS-339933?logo=nodedotjs)](https://nodejs.org/)
@@ -9,54 +9,261 @@
 [![Vitest](https://img.shields.io/badge/Vitest-3.x-6E9F18?logo=vitest)](https://vitest.dev/)
 [![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?logo=docker)](https://www.docker.com/)
 
-A definitive, production-grade technical manual and interactive runtime sandbox for **Node.js 20 & 22 LTS**. Engineered for principal software engineers, backend architects, and platform teams requiring exhaustive mastery of the V8 JIT compiler, Libuv asynchronous I/O multiplexing, deterministic microtask scheduling, zero-copy stream backpressure, thread pool sizing, multi-core worker thread isolation, and memory leak profiling.
+A definitive, production-grade **beginner-to-expert technical guide** and interactive runtime sandbox for **Node.js 20 & 22 LTS**. This curriculum starts with zero-prerequisite JavaScript runtime fundamentals, core modules, and npm management, advances through asynchronous event-driven architecture, dives deep into V8 JIT compilation and Libuv event loop phases, explores zero-copy streaming and backpressure, and culminates in multi-core clustering, worker threads, and memory profiling.
+
+---
+
+## Pedagogical Roadmap: Beginner to Expert
+
+```text
++-----------------------------------------------------------------------------------------------+
+|                                 THE NODE.JS LEARNING JOURNEY                                  |
++-------------------+-------------------+-----------------------+-------------------------------+
+| STAGE 1           | STAGE 2 & 3       | STAGE 4 & 5           | STAGE 6 & 7                   |
+| Absolute Beginner | Intermediate Core | Advanced Internals    | Expert Scaling & Staff Arch   |
++-------------------+-------------------+-----------------------+-------------------------------+
+| • What is Node?   | • Runtime Layer   | • Streams & Buffers   | • Cluster & Multi-Core        |
+| • CommonJS vs ESM | • V8 JIT Pipeline | • Backpressure Drain  | • Worker Threads & Atomics    |
+| • Core (fs, http) | • Ignition/Turbo  | • Off-Heap Allocation | • Heap Profiling & Leaks      |
+| • npm & SemVer    | • Libuv 6 Phases  | • Prototype Pollution | • 40 Staff Interview Q&A      |
+| • async / await   | • Micro/Macrotask | • ReDoS & Hardening   | • Interactive Sandbox & API   |
++-------------------+-------------------+-----------------------+-------------------------------+
+```
 
 ---
 
 ## Table of Contents
 
-1. [Architectural Overview & Runtime Topology](#1-architectural-overview--runtime-topology)
+1. [Stage 1: Absolute Beginner Foundations](#1-stage-1-absolute-beginner-foundations)
+   - [What is Node.js? JavaScript Beyond the Browser](#what-is-nodejs-javascript-beyond-the-browser)
+   - [Installing Node.js & Running Your First Program](#installing-nodejs--running-your-first-program)
+   - [Module Systems: CommonJS (`require`) vs ES Modules (`import`)](#module-systems-commonjs-require-vs-es-modules-import)
+   - [Core Built-in Modules: `fs`, `path`, and `os`](#core-built-in-modules-fs-path-and-os)
+   - [Creating a Native HTTP Web Server (`node:http`)](#creating-a-native-http-web-server-nodehttp)
+   - [The Node Package Manager (npm) & `package.json`](#the-node-package-manager-npm--packagejson)
+   - [Asynchronous JavaScript: Callbacks, Promises & `async/await`](#asynchronous-javascript-callbacks-promises--asyncawait)
+2. [Stage 2: Intermediate Runtime Architecture & Topology](#2-stage-2-intermediate-runtime-architecture--topology)
    - [The Node.js System Architecture Layer](#the-nodejs-system-architecture-layer)
    - [Node-API & C++ Addon Bindings Interface](#node-api--c-addon-bindings-interface)
    - [Thread Model: Single Threaded vs OS Multi-threading](#thread-model-single-threaded-vs-os-multi-threading)
-2. [V8 Engine Deep Dive](#2-v8-engine-deep-dive)
+3. [Stage 3: V8 Engine & Libuv Event Loop Internals](#3-stage-3-v8-engine--libuv-event-loop-internals)
    - [V8 Pipeline: Ignition, Sparkplug, Maglev & TurboFan](#v8-pipeline-ignition-sparkplug-maglev--turbofan)
    - [Hidden Classes (Shapes) & Inline Caching (IC)](#hidden-classes-shapes--inline-caching-ic)
-   - [V8 Memory Heap Architecture](#v8-memory-heap-architecture)
-   - [Garbage Collection: Orinoco, Scavenger & Major Mark-Sweep-Compact](#garbage-collection-orinoco-scavenger--major-mark-sweep-compact)
-3. [Libuv & The Event Loop Internals](#3-libuv--the-event-loop-internals)
-   - [OS Demultiplexing: epoll, kqueue & IOCP](#os-demultiplexing-epoll-kqueue--iocp)
    - [The 6 Phases of the Event Loop](#the-6-phases-of-the-event-loop)
-   - [Libuv Thread Pool Mechanics (UV_THREADPOOL_SIZE)](#libuv-thread-pool-mechanics-uv_threadpool_size)
-4. [Asynchronous Execution Model: Microtasks vs Macrotasks](#4-asynchronous-execution-model-microtasks-vs-macrotasks)
-   - [Microtask Queues: process.nextTick vs Promise.then](#microtask-queues-processnexttick-vs-promisethen)
-   - [Modern Tick Interleaving & Event Loop Draining](#modern-tick-interleaving--event-loop-draining)
-   - [setTimeout(fn, 0) vs setImmediate(fn) Determinism](#settimeoutfn-0-vs-setimmediatefn-determinism)
-5. [Streams, Buffers & Memory Mechanics](#5-streams-buffers--memory-mechanics)
-   - [Buffer Allocation: Buffer.alloc vs Buffer.allocUnsafe & Off-Heap Memory](#buffer-allocation-bufferalloc-vs-bufferallocunsafe--off-heap-memory)
+   - [Libuv Thread Pool Mechanics (`UV_THREADPOOL_SIZE`)](#libuv-thread-pool-mechanics-uv_threadpool_size)
+   - [Microtask Queues: `process.nextTick` vs `Promise.then`](#microtask-queues-processnexttick-vs-promisethen)
+4. [Stage 4: Advanced Streams, Buffers & Memory Mechanics](#4-stage-4-advanced-streams-buffers--memory-mechanics)
+   - [Buffer Allocation: `Buffer.alloc` vs `Buffer.allocUnsafe`](#buffer-allocation-bufferalloc-vs-bufferallocunsafe)
    - [The 4 Stream Paradigms: Readable, Writable, Duplex & Transform](#the-4-stream-paradigms-readable-writable-duplex--transform)
-   - [Backpressure Protocol: highWaterMark & Drain Semantics](#backpressure-protocol-highwatermark--drain-semantics)
-   - [Zero-Copy Streaming & pipeline Composition](#zero-copy-streaming--pipeline-composition)
-6. [Multi-Core Scaling, Concurrency & Parallelism](#6-multi-core-scaling-concurrency--parallelism)
+   - [Backpressure Protocol: `highWaterMark` & Drain Semantics](#backpressure-protocol-highwatermark--drain-semantics)
+   - [Zero-Copy Streaming & `pipeline` Composition](#zero-copy-streaming--pipeline-composition)
+5. [Stage 5: Multi-Core Scaling & Enterprise Security](#5-stage-5-multi-core-scaling--enterprise-security)
    - [Cluster Module & Process-Level Scalability](#cluster-module--process-level-scalability)
-   - [Worker Threads: Isolates, MessagePort & SharedArrayBuffer](#worker-threads-isolates-messageport--sharedarraybuffer)
-   - [Child Processes: spawn vs fork vs exec vs execFile](#child-processes-spawn-vs-fork-vs-exec-vs-execfile)
-7. [Diagnostics, Memory Leaks & Performance Profiling](#7-diagnostics-memory-leaks--performance-profiling)
-   - [Diagnosing Memory Leaks: Retained Object Trees & Closures](#diagnosing-memory-leaks-retained-object-trees--closures)
-   - [Heap Snapshots & DevTools Analysis](#heap-snapshots--devtools-analysis)
-   - [CPU Profiling & Flame Graph Analysis](#cpu-profiling--flame-graph-analysis)
-   - [Event Loop Lag Tracking & AsyncLocalStorage](#event-loop-lag-tracking--asynclocalstorage)
-8. [Enterprise Security & Hardening](#8-enterprise-security--hardening)
-   - [Prototype Pollution Prevention](#prototype-pollution-prevention)
-   - [ReDoS (Regular Expression Denial of Service)](#redos-regular-expression-denial-of-service)
-   - [Timing-Safe Cryptographic Comparisons](#timing-safe-cryptographic-comparisons)
-   - [Graceful Shutdown Lifecycle (SIGTERM, Draining Sockets)](#graceful-shutdown-lifecycle-sigterm-draining-sockets)
-9. [40 Senior & Staff Node.js Interview Questions](#9-40-senior--staff-nodejs-interview-questions)
-10. [Production Cheat Sheet & Operational Runbook](#10-production-cheat-sheet--operational-runbook)
+   - [Worker Threads: Isolates, `MessagePort` & `SharedArrayBuffer`](#worker-threads-isolates-messageport--sharedarraybuffer)
+   - [Child Processes: `spawn` vs `fork` vs `exec`](#child-processes-spawn-vs-fork-vs-exec)
+   - [Enterprise Security: Prototype Pollution, ReDoS & Timing Attacks](#enterprise-security-prototype-pollution-redos--timing-attacks)
+6. [Stage 6: Diagnostics, Profiling & 40 Staff Interview Questions](#6-stage-6-diagnostics-profiling--40-staff-interview-questions)
+7. [Stage 7: Interactive Sandbox & Platform Reference](#7-stage-7-interactive-sandbox--platform-reference)
 
 ---
 
-## 1. Architectural Overview & Runtime Topology
+## 1. Stage 1: Absolute Beginner Foundations
+
+### What is Node.js? JavaScript Beyond the Browser
+
+Historically, JavaScript ran exclusively inside client web browsers (Chrome, Firefox, Safari) to animate DOM elements. In 2009, Ryan Dahl created **Node.js** by taking Google Chrome's open-source **V8 JavaScript engine**, combining it with a C-based asynchronous event-driven system abstraction called **Libuv**, and enabling JavaScript to run directly on servers, desktops, and embedded devices.
+
+Node.js is:
+- **Event-Driven & Non-Blocking**: Instead of spawning a heavy operating system thread for every web request (which consumes 2-8 MB of RAM per connection in traditional servers like Apache Tomcat), Node.js uses a single main thread that delegates slow I/O operations (file reading, network queries) to the OS kernel, continuing to process other client requests instantly.
+- **Fast**: V8 compiles JavaScript directly into machine assembly code using just-in-time (JIT) compilation.
+- **Unified**: Developers can write the same language (JavaScript or TypeScript) across the entire stack—frontend, backend, database scripts, and cloud functions.
+
+---
+
+### Installing Node.js & Running Your First Program
+
+Check your installed Node.js and npm versions:
+
+```bash
+node -v   # e.g., v22.14.0
+npm -v    # e.g., 10.9.2
+```
+
+Create a file named `app.js`:
+
+```javascript
+// app.js
+const message = "Hello from Node.js!";
+console.log(message);
+console.log("Current working directory:", process.cwd());
+console.log("Node platform:", process.platform, "Architecture:", process.arch);
+```
+
+Execute it in your terminal:
+
+```bash
+node app.js
+```
+
+---
+
+### Module Systems: CommonJS (`require`) vs ES Modules (`import`)
+
+Node.js supports two module paradigms:
+
+#### 1. CommonJS (CJS) - The Traditional Default
+Historically used by Node.js. Files evaluate synchronously upon invocation:
+
+```javascript
+// math.js
+function add(a, b) {
+  return a + b;
+}
+module.exports = { add };
+
+// main.js
+const { add } = require("./math.js");
+console.log(add(5, 10)); // 15
+```
+
+#### 2. ES Modules (ESM) - The Modern ECMAScript Standard
+Activated by setting `"type": "module"` in `package.json` or naming files with `.mjs`:
+
+```javascript
+// math.mjs
+export function multiply(a, b) {
+  return a * b;
+}
+
+// main.mjs
+import { multiply } from "./math.mjs";
+console.log(multiply(4, 5)); // 20
+```
+
+---
+
+### Core Built-in Modules: `fs`, `path`, and `os`
+
+Node.js includes powerful standard modules without requiring external dependencies:
+
+#### 1. File System (`node:fs/promises`)
+```javascript
+import fs from "node:fs/promises";
+
+async function fileOperations() {
+  // Write text file
+  await fs.writeFile("server.log", "Server initialized at " + new Date().toISOString() + "\n");
+  
+  // Read text file
+  const contents = await fs.readFile("server.log", "utf-8");
+  console.log("Log contents:", contents);
+}
+fileOperations();
+```
+
+#### 2. Path Handling (`node:path`)
+Ensures path separators (`/` on Linux/macOS, `\` on Windows) work seamlessly across operating systems:
+
+```javascript
+import path from "node:path";
+
+const configPath = path.join(process.cwd(), "config", "settings.json");
+console.log("Normalized Path:", configPath);
+console.log("Extension:", path.extname(configPath)); // .json
+```
+
+---
+
+### Creating a Native HTTP Web Server (`node:http`)
+
+You can launch a full-featured web server with zero external libraries:
+
+```javascript
+import http from "node:http";
+
+const server = http.createServer((req, res) => {
+  const { method, url } = req;
+  
+  if (url === "/health" && method === "GET") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    return res.end(JSON.stringify({ status: "healthy", uptime: process.uptime() }));
+  }
+
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.end("<h1>Welcome to Node.js Enterprise Server</h1>");
+});
+
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server listening on http://localhost:${PORT}`);
+});
+```
+
+---
+
+### The Node Package Manager (npm) & `package.json`
+
+`package.json` is the manifest of any Node.js project:
+
+```bash
+# Initialize a new Node project non-interactively
+npm init -y
+```
+
+```json
+{
+  "name": "my-node-app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "express": "^5.0.1"
+  },
+  "devDependencies": {
+    "vitest": "^3.0.0"
+  }
+}
+```
+
+- **`dependencies`**: Required at runtime in production.
+- **`devDependencies`**: Only needed during local development and automated testing.
+- **`node --watch`**: Built-in hot-reloading (Node 18+) that automatically restarts your process on code changes!
+
+---
+
+### Asynchronous JavaScript: Callbacks, Promises & `async/await`
+
+Node.js heavily relies on asynchronous patterns to prevent blocking the single execution thread:
+
+```javascript
+// 1. The Promise pattern
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// 2. Modern async/await with robust error handling
+async function executeWorkload() {
+  try {
+    console.log("Starting task...");
+    await delay(100);
+    console.log("Task completed without blocking other clients!");
+  } catch (error) {
+    console.error("Task failed:", error);
+  }
+}
+
+executeWorkload();
+```
+
+---
+
+## 2. Stage 2: Intermediate Runtime Architecture & Topology
+
+---
 
 ### The Node.js System Architecture Layer
 
@@ -108,7 +315,9 @@ Node.js is not a programming language or an isolated framework; it is a cross-pl
 
 ---
 
-## 2. V8 Engine Deep Dive
+## 3. Stage 3: V8 Engine & Libuv Event Loop Internals
+
+### V8 Engine Deep Dive
 
 ### V8 Pipeline: Ignition, Sparkplug, Maglev & TurboFan
 
@@ -243,8 +452,9 @@ V8 employs two distinct garbage collectors:
    - **Sweeping**: Frees memory slots occupied by dead objects and adds them to free lists.
    - **Compacting**: Slides surviving objects together to eliminate external heap fragmentation.
 
+---
 
-## 3. Libuv & The Event Loop Internals
+### Libuv & The Event Loop Internals
 
 ### OS Demultiplexing: epoll, kqueue & IOCP
 
@@ -347,8 +557,9 @@ To prevent these blocking operations from freezing the single JavaScript event l
   ```
 - **Thread Starvation**: If 4 simultaneous heavy crypto hashing calls run concurrently, all 4 threads are occupied. Any subsequent `fs.readFile()` or `dns.lookup()` will be blocked in queue until a thread frees up!
 
+---
 
-## 4. Asynchronous Execution Model: Microtasks vs Macrotasks
+### Asynchronous Execution Model: Microtasks vs Macrotasks
 
 ### Microtask Queues: process.nextTick vs Promise.then
 
@@ -433,8 +644,9 @@ fs.readFile(__filename, () => {
 - **Behavior**: **`setImmediate` ALWAYS executes first!**
 - **Reason**: The `fs.readFile` callback runs in the **Poll Phase**. Once it returns, the event loop must check for `setImmediate` before looping back to Timers. Since a `setImmediate` is queued, the loop immediately transitions to the **Check Phase** and executes it before wrapping around to the **Timers Phase**.
 
+---
 
-## 5. Streams, Buffers & Memory Mechanics
+## 4. Stage 4: Advanced Streams, Buffers & Memory Mechanics
 
 ### Buffer Allocation: Buffer.alloc vs Buffer.allocUnsafe & Off-Heap Memory
 
@@ -553,8 +765,11 @@ async function compressLogFile(input: string, output: string) {
 }
 ```
 
+---
 
-## 6. Multi-Core Scaling, Concurrency & Parallelism
+## 5. Stage 5: Multi-Core Scaling & Enterprise Security
+
+### Multi-Core Scaling, Concurrency & Parallelism
 
 ### Cluster Module & Process-Level Scalability
 
@@ -676,8 +891,11 @@ if (isMainThread) {
 | **`execFile()`** | No | Buffers into memory | Executing a known binary executable directly without shell overhead. |
 | **`fork()`** | No | Streams + IPC channel | Spawning separate Node.js processes with built-in `send()` / `message` IPC. |
 
+---
 
-## 7. Diagnostics, Memory Leaks & Performance Profiling
+## 6. Stage 6: Diagnostics, Profiling & 40 Staff Interview Questions
+
+### Diagnostics, Memory Leaks & Performance Profiling
 
 ### Diagnosing Memory Leaks: Retained Object Trees & Closures
 
@@ -788,7 +1006,7 @@ export function logAudit(action: string) {
 
 ---
 
-## 8. Enterprise Security & Hardening
+### Enterprise Security & Hardening
 
 ### Prototype Pollution Prevention
 Attacker injects properties into `Object.prototype`, altering the behavior of all objects across the application:
@@ -854,8 +1072,9 @@ export function verifyApiToken(providedToken: string, expectedToken: string): bo
 }
 ```
 
+---
 
-## 9. 40 Senior & Staff Node.js Interview Questions
+### 40 Senior & Staff Node.js Interview Questions
 
 <details>
 <summary><strong>1. Explain the difference between process.nextTick and setImmediate in terms of scheduling and priority.</strong></summary>
@@ -1066,7 +1285,9 @@ The empirical observation that the vast majority of allocated objects have very 
 
 ---
 
-## 10. Production Cheat Sheet & Operational Runbook
+## 7. Stage 7: Interactive Sandbox & Platform Reference
+
+### Production Cheat Sheet & Operational Runbook
 
 ### Key Node.js CLI Flags
 ```bash
