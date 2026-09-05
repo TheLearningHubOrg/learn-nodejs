@@ -1,0 +1,8 @@
+---
+description: Cursor rules for learn-nodejs
+globs: "**/*.ts"
+---
+- Use TypeScript 5.7+ features with strict type safety.
+- Import local modules using explicit `.js` extensions (NodeNext ESM standard).
+- Verify all unit and integration tests pass with `npm test`.
+- Do not introduce synchronous blocking operations into the Express event loop.

@@ -1,22 +1,50 @@
 {
   "name": "learn-nodejs",
-  "version": "1.0.0",
-  "description": "This is a repository for learning Node.js. It contains a collection of resources to learn Node.js from scratch. It includes topics like Node.js, NPM, Modules, Events, File System, HTTP, Express, RESTful API, MongoDB, Mongoose, Authentication, Authorization, Validation, Unit Testing, Integration Testing, Test Driven Development, Deployment, Security, Performance, Scalability, Design Patterns, Error Handling, Logging, Debugging, Monitoring, CI/CD, Docker, Microservices, GraphQL, Websockets, TypeScript, ES6, and Best Practices.",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Comprehensive enterprise curriculum, production architecture guide, and interactive runtime sandbox for Node.js 20/22 LTS, V8, Libuv, and TypeScript.",
+  "type": "module",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start:ts": "node index.ts",
-    "start:js": "node index.js"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manthanank/learn-nodejs.git"
   },
-  "keywords": [],
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "v8",
+    "libuv",
+    "event-loop",
+    "streams",
+    "worker-threads",
+    "cluster",
+    "performance",
+    "express"
+  ],
   "author": "Manthan Ankolekar",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/manthanank/learn-nodejs/issues"
   },
-  "homepage": "https://github.com/manthanank/learn-nodejs#readme"
+  "homepage": "https://github.com/manthanank/learn-nodejs#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^3.0.0"
+  }
 }

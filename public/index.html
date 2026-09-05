@@ -1,17 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webpage</title>
-    <link rel="stylesheet" href="/public/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node.js Enterprise Architecture & Runtime Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --accent-node: #339933;
+      --accent-node-light: #68a063;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #8b5cf6;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(51, 153, 51, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      background: rgba(51, 153, 51, 0.15);
+      border: 1px solid rgba(51, 153, 51, 0.3);
+      color: var(--accent-node-light);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-node-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .grid-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 14px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .metric-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.92rem;
+    }
+
+    .metric-label {
+      color: var(--text-muted);
+    }
+
+    .metric-val {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .interactive-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .interactive-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, var(--accent-node) 0%, #257325 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      width: 100%;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .btn-action:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+
+    .form-group {
+      margin-bottom: 0.85rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-card);
+      border-radius: 6px;
+      color: white;
+      padding: 0.55rem 0.75rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+    }
+
+    .results-display {
+      background: #080c14;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .step-badge {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .badge-sync { background: rgba(139, 92, 246, 0.25); color: #c4b5fd; }
+    .badge-nextTick { background: rgba(244, 63, 94, 0.25); color: #fda4af; }
+    .badge-microtask { background: rgba(6, 182, 212, 0.25); color: #67e8f9; }
+    .badge-timer { background: rgba(245, 158, 11, 0.25); color: #fde68a; }
+    .badge-check { background: rgba(51, 153, 51, 0.25); color: #86efac; }
+
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border-card);
+      padding-top: 1.5rem;
+    }
+  </style>
 </head>
-
 <body>
-    <h1>Welcome to the Page</h1>
-    <script src="/public/script.js"></script>
-</body>
+  <div class="container">
+    <header>
+      <div class="badge-pill">
+        <span>⚡</span> Node.js 20/22 LTS Architecture Masterclass
+      </div>
+      <h1>Enterprise Node.js & V8 Runtime Sandbox</h1>
+      <p class="subtitle">
+        Interactive inspection of V8 heap memory, event loop phases, backpressure stream pipelines, and worker thread CPU offloading.
+      </p>
+    </header>
 
+    <!-- Top Telemetry Dashboard -->
+    <div class="grid-dashboard">
+      <div class="card">
+        <h3><span>🧠</span> V8 Memory Heap</h3>
+        <div class="metric-group">
+          <div class="metric-row">
+            <span class="metric-label">Heap Used</span>
+            <span class="metric-val" id="val-heap-used">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Heap Total</span>
+            <span class="metric-val" id="val-heap-total">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Resident Set (RSS)</span>
+            <span class="metric-val" id="val-rss">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">External / Buffers</span>
+            <span class="metric-val" id="val-external">--</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span>⚙️</span> Process Telemetry</h3>
+        <div class="metric-group">
+          <div class="metric-row">
+            <span class="metric-label">Node / V8 Version</span>
+            <span class="metric-val" id="val-node-version">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">OS Platform / Arch</span>
+            <span class="metric-val" id="val-platform">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Process PID</span>
+            <span class="metric-val" id="val-pid">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Uptime</span>
+            <span class="metric-val" id="val-uptime">--</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><span>🔄</span> Libuv Handles & CPU</h3>
+        <div class="metric-group">
+          <div class="metric-row">
+            <span class="metric-label">Active Handles</span>
+            <span class="metric-val" id="val-handles">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Active Requests</span>
+            <span class="metric-val" id="val-requests">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">User CPU</span>
+            <span class="metric-val" id="val-cpu-user">--</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">System CPU</span>
+            <span class="metric-val" id="val-cpu-sys">--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Sandboxes -->
+    <div class="interactive-section">
+      <!-- Sandbox 1: Event Loop Phase Tracer -->
+      <div class="card">
+        <h3><span>⏱️</span> Event Loop Phase Tracer</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Traces microtask queuing (<code>process.nextTick</code>, <code>Promise.then</code>) vs macrotask execution (<code>setTimeout</code>, <code>setImmediate</code>).
+        </p>
+        <button class="btn-action" id="btn-run-loop" onclick="triggerEventLoop()">
+          ▶ Execute Event Loop Simulation
+        </button>
+        <div class="results-display" id="loop-output">
+          Click the button above to trace phase execution...
+        </div>
+      </div>
+
+      <!-- Sandbox 2: Streams & Backpressure -->
+      <div class="card">
+        <h3><span>🌊</span> Stream Pipeline & Backpressure</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Pipes high-volume chunks through a Transform stream into a throttled Writable stream with <code>highWaterMark</code> backpressure tracking.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label>Total Chunks</label>
+            <input type="number" id="stream-chunks" value="50" min="10" max="200" />
+          </div>
+          <div class="form-group">
+            <label>Chunk Size (KB)</label>
+            <input type="number" id="stream-chunk-size" value="16" min="4" max="128" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>HighWaterMark (KB)</label>
+          <input type="number" id="stream-hwm" value="32" min="8" max="128" />
+        </div>
+        <button class="btn-action" id="btn-run-stream" onclick="triggerStreamPipeline()">
+          ▶ Run Pipeline & Measure Backpressure
+        </button>
+        <div class="results-display" id="stream-output">
+          Pipeline metrics will display here...
+        </div>
+      </div>
+    </div>
+
+    <!-- Sandbox 3: Worker Threads -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <h3><span>🧵</span> Worker Threads CPU Offloading</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Computes 150,000 prime numbers in either a separate Libuv/V8 <code>worker_threads</code> isolate or synchronously on the Main Thread.
+      </p>
+      <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label>Prime Search Limit (Max Number)</label>
+          <input type="number" id="worker-range" value="150000" min="5000" max="500000" />
+        </div>
+        <div class="form-group" style="width: 220px; margin-bottom: 0;">
+          <label>Execution Mode</label>
+          <select id="worker-mode">
+            <option value="true">Worker Thread (Offloaded)</option>
+            <option value="false">Main Thread (Blocking)</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-action" id="btn-run-worker" onclick="triggerWorkerTask()" style="margin-top: 1rem;">
+        ▶ Compute Primes & Compare Latency
+      </button>
+      <div class="results-display" id="worker-output">
+        Worker thread benchmark results will render here...
+      </div>
+    </div>
+
+    <footer>
+      Node.js Masterclass 2.0.0 &bull; Built with TypeScript 5.7+ & Express 5 &bull; MIT Licensed
+    </footer>
+  </div>
+
+  <script>
+    async function fetchDiagnostics() {
+      try {
+        const res = await fetch('/api/diagnostics');
+        const json = await res.json();
+        if (json.success) {
+          const d = json.data;
+          document.getElementById('val-heap-used').innerText = d.memory.heapUsedFormatted;
+          document.getElementById('val-heap-total').innerText = d.memory.heapTotalFormatted;
+          document.getElementById('val-rss').innerText = d.memory.rssFormatted;
+          document.getElementById('val-external').innerText = d.memory.externalFormatted;
+
+          document.getElementById('val-node-version').innerText = `${d.nodeVersion} (V8 ${d.v8Version})`;
+          document.getElementById('val-platform').innerText = `${d.platform} (${d.arch})`;
+          document.getElementById('val-pid').innerText = d.pid;
+          document.getElementById('val-uptime').innerText = `${d.uptimeSeconds}s`;
+
+          document.getElementById('val-handles').innerText = d.activeHandles;
+          document.getElementById('val-requests').innerText = d.activeRequests;
+          document.getElementById('val-cpu-user').innerText = `${(d.cpu.user / 1000).toFixed(0)} ms`;
+          document.getElementById('val-cpu-sys').innerText = `${(d.cpu.system / 1000).toFixed(0)} ms`;
+        }
+      } catch (err) {
+        console.error('Failed to load diagnostics', err);
+      }
+    }
+
+    async function triggerEventLoop() {
+      const out = document.getElementById('loop-output');
+      out.innerHTML = 'Executing tick sequence...';
+      try {
+        const res = await fetch('/api/sandbox/event-loop', { method: 'POST' });
+        const json = await res.json();
+        if (json.success) {
+          let html = `<div style="color: var(--accent-node-light); margin-bottom: 0.5rem; font-weight: 600;">Execution Order (${json.data.totalSteps} steps):</div>`;
+          json.data.sequence.forEach(s => {
+            html += `
+              <div class="step-item">
+                <span class="step-badge badge-${s.phase}">${s.phase}</span>
+                <div>
+                  <strong>#${s.order}: ${s.name}</strong> (+${s.executionTimestamp.toFixed(2)}ms)
+                  <div style="color: var(--text-muted); font-size: 0.78rem;">${s.description}</div>
+                </div>
+              </div>
+            `;
+          });
+          out.innerHTML = html;
+        }
+      } catch (err) {
+        out.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    async function triggerStreamPipeline() {
+      const out = document.getElementById('stream-output');
+      out.innerHTML = 'Streaming chunks through pipeline...';
+      const totalChunks = document.getElementById('stream-chunks').value;
+      const chunkSizeKb = document.getElementById('stream-chunk-size').value;
+      const highWaterMarkKb = document.getElementById('stream-hwm').value;
+
+      try {
+        const res = await fetch('/api/sandbox/stream-pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ totalChunks, chunkSizeKb, highWaterMarkKb })
+        });
+        const json = await res.json();
+        if (json.success) {
+          const m = json.data;
+          out.innerHTML = `
+            <div style="color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.5rem;">Pipeline Completed Successfully:</div>
+            <div>&bull; Total Transferred: <strong>${(m.totalBytes / (1024*1024)).toFixed(2)} MB</strong> (${m.chunksCount} chunks)</div>
+            <div>&bull; Duration: <strong>${m.durationMs} ms</strong></div>
+            <div>&bull; Throughput: <strong>${m.throughputMbSec} MB/s</strong></div>
+            <div>&bull; Backpressure Drains: <strong>${m.backpressureCount} events</strong></div>
+            <div style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">Sample: ${m.sampleOutput}</div>
+          `;
+        }
+      } catch (err) {
+        out.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    async function triggerWorkerTask() {
+      const out = document.getElementById('worker-output');
+      out.innerHTML = 'Calculating primes...';
+      const rangeMax = document.getElementById('worker-range').value;
+      const useWorkerThread = document.getElementById('worker-mode').value === 'true';
+
+      try {
+        const res = await fetch('/api/sandbox/worker-thread', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rangeMax, useWorkerThread })
+        });
+        const json = await res.json();
+        if (json.success) {
+          const w = json.data;
+          out.innerHTML = `
+            <div style="color: var(--accent-amber); font-weight: 600; margin-bottom: 0.5rem;">Calculation Complete:</div>
+            <div>&bull; Execution Context: <strong>${w.isMainThread ? 'MAIN THREAD (Call Stack Blocked)' : `WORKER THREAD (ID #${w.threadId})`}</strong></div>
+            <div>&bull; Primes Found: <strong>${w.primesFound.toLocaleString()}</strong> in range [2 .. ${w.rangeMax.toLocaleString()}]</div>
+            <div>&bull; Execution Time: <strong>${w.durationMs} ms</strong></div>
+          `;
+        }
+      } catch (err) {
+        out.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    // Initialize telemetry polling
+    fetchDiagnostics();
+    setInterval(fetchDiagnostics, 3000);
+  </script>
+</body>
 </html>

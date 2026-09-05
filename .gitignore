@@ -29,7 +29,6 @@ dist_electron_release/
 *.csv
 
 # Editor files
-.vscode/
 .idea/
 *.iml
 *.swp

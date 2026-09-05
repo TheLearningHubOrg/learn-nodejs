@@ -1,29 +1,47 @@
 name: Releases
+
 on:
   push:
     branches:
       - main
+
+permissions:
+  contents: write
 
 jobs:
   changelog:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.7.1
+      - name: Checkout Code
+        uses: actions/checkout@v4
         with:
-          github-token: ${{ secrets.PA_TOKEN}}
-          version-file: './releases.json'
+          fetch-depth: 0
 
-      - name: create release
-        uses: actions/create-release@v1
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}
+      - name: Check for PA_TOKEN
+        id: check_token
+        run: |
+          if [ -n "${{ secrets.PA_TOKEN }}" ]; then
+            echo "has_token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_token=false" >> $GITHUB_OUTPUT
+            echo "::notice::PA_TOKEN not configured. Skipping automated release."
+          fi
+
+      - name: Conventional Changelog Action
+        if: steps.check_token.outputs.has_token == 'true'
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          github-token: ${{ secrets.PA_TOKEN }}
+          version-file: './package.json,./releases.json'
+
+      - name: Create Release
+        if: steps.check_token.outputs.has_token == 'true' && steps.changelog.outputs.skipped == 'false'
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
           body: ${{ steps.changelog.outputs.clean_changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}

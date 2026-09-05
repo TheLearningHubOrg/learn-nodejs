@@ -1,20 +1,30 @@
-# Use Node.js 14 LTS version as base image
-FROM node:14
+# Build stage
+FROM node:20-alpine AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm install
-
-# Copy all files from the current directory to the working directory in the container
 COPY . .
+RUN npm run build
 
-# Expose the port the app runs on
+# Production stage
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
+
 EXPOSE 3000
 
-# Command to run the application
-CMD ["node", "index.js"]
+USER node
+
+CMD ["node", "dist/server.js"]
