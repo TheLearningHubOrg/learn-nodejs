@@ -1,3 +1,12 @@
+# [2.2.0](https://github.com/manthanank/learn-nodejs/compare/v2.1.0...v2.2.0) (2026-09-07)
+
+
+### Features
+
+* **nodejs:** expand to exhaustive encyclopedia with 1,879 lines, 23 mermaid diagrams and 50 interview Q&As ([9af355f](https://github.com/manthanank/learn-nodejs/commit/9af355fc975a9a535e9fa009f8711ef18992b31d))
+
+
+
 # [2.1.0](https://github.com/manthanank/learn-nodejs/compare/v0.4.0...v2.1.0) (2026-09-05)
 
 
@@ -31,16 +40,6 @@
 ### Features
 
 * Add code changes for new feature ([d3cf2e9](https://github.com/manthanank/learn-nodejs/commit/d3cf2e94ceb8e897b7a44ce6941662b800e20f79))
-
-
-
-# [0.1.0](https://github.com/manthanank/learn-nodejs/compare/dbeb5e73496d5e54a3664269d0e06e5ad1ac2565...v0.1.0) (2024-06-11)
-
-
-### Features
-
-* docker added ([fd5c1e7](https://github.com/manthanank/learn-nodejs/commit/fd5c1e7884fd3930142252ad816d0808fa6ac038))
-* initial commit ([dbeb5e7](https://github.com/manthanank/learn-nodejs/commit/dbeb5e73496d5e54a3664269d0e06e5ad1ac2565))
 
 
 
