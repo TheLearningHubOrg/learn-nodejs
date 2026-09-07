@@ -1,1434 +1,1879 @@
-# Learn Node.js: The Complete Beginner-to-Expert Masterclass
+# Exhaustive Production-Grade Node.js Masterclass: From Beginner to Staff Platform Architect
 
+[![CI Pipeline](https://github.com/manthanank/learn-nodejs/actions/workflows/ci.yml/badge.svg)](https://github.com/manthanank/learn-nodejs/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-20.x%20%7C%2022.x%20LTS-339933?logo=nodedotjs)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-3178C6?logo=typescript)](https://www.typescriptlang.org/)
-[![V8](https://img.shields.io/badge/V8-JIT%20Engine-4285F4?logo=googlechrome)](https://v8.dev/)
-[![Libuv](https://img.shields.io/badge/Libuv-Event%20Loop-FF6F00)](https://libuv.org/)
-[![Express](https://img.shields.io/badge/Express-5.0+-000000?logo=express)](https://expressjs.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-3.x-6E9F18?logo=vitest)](https://vitest.dev/)
-[![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?logo=docker)](https://www.docker.com/)
+[![Node.js Version](https://img.shields.io/badge/Node.js-22.x%20LTS-339933.svg?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-A definitive, production-grade **beginner-to-expert technical guide** and interactive runtime sandbox for **Node.js 20 & 22 LTS**. This curriculum starts with zero-prerequisite JavaScript runtime fundamentals, core modules, and npm management, advances through asynchronous event-driven architecture, dives deep into V8 JIT compilation and Libuv event loop phases, explores zero-copy streaming and backpressure, and culminates in multi-core clustering, worker threads, and memory profiling.
-
----
-
-## Pedagogical Roadmap: Beginner to Expert
-
-```text
-+-----------------------------------------------------------------------------------------------+
-|                                 THE NODE.JS LEARNING JOURNEY                                  |
-+-------------------+-------------------+-----------------------+-------------------------------+
-| STAGE 1           | STAGE 2 & 3       | STAGE 4 & 5           | STAGE 6 & 7                   |
-| Absolute Beginner | Intermediate Core | Advanced Internals    | Expert Scaling & Staff Arch   |
-+-------------------+-------------------+-----------------------+-------------------------------+
-| • What is Node?   | • Runtime Layer   | • Streams & Buffers   | • Cluster & Multi-Core        |
-| • CommonJS vs ESM | • V8 JIT Pipeline | • Backpressure Drain  | • Worker Threads & Atomics    |
-| • Core (fs, http) | • Ignition/Turbo  | • Off-Heap Allocation | • Heap Profiling & Leaks      |
-| • npm & SemVer    | • Libuv 6 Phases  | • Prototype Pollution | • 40 Staff Interview Q&A      |
-| • async / await   | • Micro/Macrotask | • ReDoS & Hardening   | • Interactive Sandbox & API   |
-+-------------------+-------------------+-----------------------+-------------------------------+
-```
+Welcome to the definitive, encyclopedic masterclass on **Node.js, V8 Runtime Internals, and High-Performance Backend Engineering**. This guide is crafted for software engineers, backend architects, DevOps practitioners, and systems developers. It covers every single native module, CLI flag, V8 memory allocation mechanic, asynchronous stream pipeline, worker thread concurrency pattern, and multi-core scaling architecture—with standalone runnable code examples and line-by-line pedagogical breakdown tables for every single topic.
 
 ---
 
 ## Table of Contents
-
-1. [Stage 1: Absolute Beginner Foundations](#1-stage-1-absolute-beginner-foundations)
-   - [What is Node.js? JavaScript Beyond the Browser](#what-is-nodejs-javascript-beyond-the-browser)
-   - [Installing Node.js & Running Your First Program](#installing-nodejs--running-your-first-program)
-   - [Module Systems: CommonJS (`require`) vs ES Modules (`import`)](#module-systems-commonjs-require-vs-es-modules-import)
-   - [Core Built-in Modules: `fs`, `path`, and `os`](#core-built-in-modules-fs-path-and-os)
-   - [Creating a Native HTTP Web Server (`node:http`)](#creating-a-native-http-web-server-nodehttp)
-   - [The Node Package Manager (npm) & `package.json`](#the-node-package-manager-npm--packagejson)
-   - [Asynchronous JavaScript: Callbacks, Promises & `async/await`](#asynchronous-javascript-callbacks-promises--asyncawait)
-2. [Stage 2: Intermediate Runtime Architecture & Topology](#2-stage-2-intermediate-runtime-architecture--topology)
-   - [The Node.js System Architecture Layer](#the-nodejs-system-architecture-layer)
-   - [Node-API & C++ Addon Bindings Interface](#node-api--c-addon-bindings-interface)
-   - [Thread Model: Single Threaded vs OS Multi-threading](#thread-model-single-threaded-vs-os-multi-threading)
-3. [Stage 3: V8 Engine & Libuv Event Loop Internals](#3-stage-3-v8-engine--libuv-event-loop-internals)
-   - [V8 Pipeline: Ignition, Sparkplug, Maglev & TurboFan](#v8-pipeline-ignition-sparkplug-maglev--turbofan)
-   - [Hidden Classes (Shapes) & Inline Caching (IC)](#hidden-classes-shapes--inline-caching-ic)
-   - [The 6 Phases of the Event Loop](#the-6-phases-of-the-event-loop)
-   - [Libuv Thread Pool Mechanics (`UV_THREADPOOL_SIZE`)](#libuv-thread-pool-mechanics-uv_threadpool_size)
-   - [Microtask Queues: `process.nextTick` vs `Promise.then`](#microtask-queues-processnexttick-vs-promisethen)
-4. [Stage 4: Advanced Streams, Buffers & Memory Mechanics](#4-stage-4-advanced-streams-buffers--memory-mechanics)
-   - [Buffer Allocation: `Buffer.alloc` vs `Buffer.allocUnsafe`](#buffer-allocation-bufferalloc-vs-bufferallocunsafe)
-   - [The 4 Stream Paradigms: Readable, Writable, Duplex & Transform](#the-4-stream-paradigms-readable-writable-duplex--transform)
-   - [Backpressure Protocol: `highWaterMark` & Drain Semantics](#backpressure-protocol-highwatermark--drain-semantics)
-   - [Zero-Copy Streaming & `pipeline` Composition](#zero-copy-streaming--pipeline-composition)
-5. [Stage 5: Multi-Core Scaling & Enterprise Security](#5-stage-5-multi-core-scaling--enterprise-security)
-   - [Cluster Module & Process-Level Scalability](#cluster-module--process-level-scalability)
-   - [Worker Threads: Isolates, `MessagePort` & `SharedArrayBuffer`](#worker-threads-isolates-messageport--sharedarraybuffer)
-   - [Child Processes: `spawn` vs `fork` vs `exec`](#child-processes-spawn-vs-fork-vs-exec)
-   - [Enterprise Security: Prototype Pollution, ReDoS & Timing Attacks](#enterprise-security-prototype-pollution-redos--timing-attacks)
-6. [Stage 6: Diagnostics, Profiling & 40 Staff Interview Questions](#6-stage-6-diagnostics-profiling--40-staff-interview-questions)
-7. [Stage 7: Interactive Sandbox & Platform Reference](#7-stage-7-interactive-sandbox--platform-reference)
-
----
-
-## 1. Stage 1: Absolute Beginner Foundations
-
-### What is Node.js? JavaScript Beyond the Browser
-
-Historically, JavaScript ran exclusively inside client web browsers (Google Chrome, Mozilla Firefox, Apple Safari) to manipulate DOM elements. In 2009, Ryan Dahl created **Node.js** by taking Google Chrome's open-source **V8 JavaScript engine**, combining it with a C-based asynchronous event-driven system library called **Libuv**, and enabling JavaScript to run directly on server operating systems.
-
-```text
-+-------------------------------------------------------------------------------+
-| TRADITIONAL MULTITHREADED SERVER (Apache/Tomcat)                              |
-| Request 1 ──▶ Thread 1 (Allocates 2-8 MB RAM stack) ──▶ Blocks on DB Query    |
-| Request 2 ──▶ Thread 2 (Allocates 2-8 MB RAM stack) ──▶ Blocks on File Read   |
-| Request N ──▶ Out of Memory / Thread Pool Starvation                          |
-+-------------------------------------------------------------------------------+
-| NODE.JS EVENT-DRIVEN ARCHITECTURE (Single Execution Thread + Event Loop)      |
-| Request 1 ──┐                                                                 |
-| Request 2 ──┼─▶ Event Queue ──▶ Main Thread ──▶ Delegates slow I/O to OS Kernel |
-| Request N ──┘                                      (Handles 100,000+ requests)|
-+-------------------------------------------------------------------------------+
-```
-
-Node.js provides three revolutionary advantages:
-1. **Event-Driven & Non-Blocking I/O**: Instead of blocking execution while reading a file from disk or querying a database, Node.js offloads the operation to the operating system kernel and processes subsequent user requests immediately. When the I/O operation completes, an event callback is pushed to the event loop.
-2. **Extreme JIT Compilation Speed**: V8 compiles high-level JavaScript source directly into native machine CPU instructions at runtime.
-3. **Full-Stack JavaScript/TypeScript**: Eliminates the cognitive burden of switching languages between frontend (React/Vue/Angular) and backend (Python/Java/PHP).
+1. [Stage 1: Architecture, V8 Engine & Libuv Event Loop](#1-stage-1-architecture-v8-engine--libuv-event-loop)
+   - 1.1 Node.js Runtime Architecture Overview
+   - 1.2 Google V8 Engine: Ignition, TurboFan, and JIT Optimization
+   - 1.3 V8 Memory Allocation: Call Stack, Heap, and Garbage Collection
+   - 1.4 Hidden Classes and Inline Caching
+   - 1.5 The Libuv Event Loop: The 6 Phases in Depth
+   - 1.6 Microtasks vs Macrotasks: `process.nextTick()` vs `Promise`
+   - 1.7 Libuv Thread Pool: `UV_THREADPOOL_SIZE` & Non-Blocking OS I/O
+2. [Stage 2: Core Native Modules & Complete API Encyclopedia](#2-stage-2-core-native-modules--complete-api-encyclopedia)
+   - 2.1 File System (`node:fs` & `node:fs/promises`)
+   - 2.2 Path Management (`node:path`)
+   - 2.3 Operating System & Hardware (`node:os`)
+   - 2.4 Event-Driven Architecture (`node:events`)
+   - 2.5 Binary Data & Buffers (`node:buffer`)
+   - 2.6 Stream Processing & Backpressure (`node:stream`)
+   - 2.7 HTTP & HTTPS Networking (`node:http`, `node:https`)
+   - 2.8 HTTP/2 Multiplexing (`node:http2`)
+   - 2.9 Cryptography & Security (`node:crypto`)
+   - 2.10 Process Management & IPC (`node:child_process`)
+   - 2.11 Multi-Threaded Parallelism (`node:worker_threads`)
+   - 2.12 Multi-Process Clustering (`node:cluster`)
+   - 2.13 Raw Networking: TCP & UDP (`node:net`, `node:dgram`)
+   - 2.14 Data Compression (`node:zlib`)
+   - 2.15 Asynchronous Execution Context (`node:async_hooks` & `AsyncLocalStorage`)
+   - 2.16 Performance Hooks & Metrics (`node:perf_hooks`)
+   - 2.17 Diagnostics & V8 Profiling (`node:diagnostics_channel`, `node:v8`)
+   - 2.18 Native Test Runner (`node:test` & `node:assert`)
+   - 2.19 Utility Functions (`node:util`)
+3. [Stage 3: Module Systems, Tooling & Modern Node 22+ Features](#3-stage-3-module-systems-tooling--modern-node-22-features)
+   - 3.1 CommonJS vs ES Modules: Deep Architectural Comparison
+   - 3.2 The `package.json` Exports & Imports Map
+   - 3.3 Native TypeScript Execution (`--experimental-strip-types`)
+   - 3.4 Built-in Environment File Loading (`--env-file`)
+   - 3.5 Native File Watcher (`node --watch`)
+   - 3.6 Essential Node.js CLI Flags & Environment Variables
+4. [Stage 4: Production Frameworks, ORMs & Data Pipelines](#4-stage-4-production-frameworks-orms--data-pipelines)
+   - 4.1 Framework Benchmark: Express 5 vs Fastify vs NestJS
+   - 4.2 Fastify High-Throughput Schema Validation with Ajv
+   - 4.3 Database Access: Prisma vs Drizzle vs Native `pg` Pool
+   - 4.4 Distributed Caching with Redis & ioredis
+   - 4.5 Background Job Processing with BullMQ
+5. [Stage 5: Enterprise Security, Memory Leaks & Reliability](#5-stage-5-enterprise-security-memory-leaks--reliability)
+   - 5.1 Memory Leak Profiling: Chrome DevTools & Heap Snapshots
+   - 5.2 Detecting and Mitigating Event Loop Lag
+   - 5.3 Prototype Pollution Prevention
+   - 5.4 Regular Expression Denial of Service (ReDoS) Protection
+   - 5.5 Graceful Shutdown & Zero-Downtime Signal Handling
+6. [Stage 6: End-to-End Enterprise Reference Implementations](#6-stage-6-end-to-end-enterprise-reference-implementations)
+   - 6.1 Project 1: High-Performance Gzip Streaming File Server
+   - 6.2 Project 2: Multi-Threaded Heavy Compute Worker Pool API
+   - 6.3 Project 3: Distributed Microservice with AsyncLocalStorage Tracing
+7. [Stage 7: Staff Node.js Architect Interview Handbook & Cheatsheet](#7-stage-7-staff-nodejs-architect-interview-handbook--cheatsheet)
+   - 7.1 50 In-Depth Technical Interview Questions & Answers
+   - 7.2 Native API Quick-Reference Cheatsheet
+8. [Community, Contributing & Support](#8-community-contributing--support)
 
 ---
 
-### Installing Node.js & Running Your First Program
+## 1. Stage 1: Architecture, V8 Engine & Libuv Event Loop
 
-Verify that Node.js and its package manager (`npm`) are installed on your machine:
+### 1.1 Node.js Runtime Architecture Overview
+Node.js is not a programming language; it is an open-source, cross-platform JavaScript runtime environment built on Google's open-source V8 JavaScript engine, combined with a low-level C library called **libuv** for asynchronous I/O, c-ares for DNS resolution, llhttp for HTTP parsing, and OpenSSL for cryptographic primitives.
 
-```bash
-node -v   # Output: v22.14.0 (Recommended LTS version)
-npm -v    # Output: 10.9.2
+```mermaid
+flowchart TD
+    subgraph AppLayer["Application Layer"]
+        JS["JavaScript / TypeScript Code"]
+        Modules["Node.js Native Modules (fs, http, crypto, stream)"]
+    end
+    subgraph BindingLayer["Node.js C++ Bindings Layer"]
+        Bindings["Node.js C++ Addons & Core Bindings (node_file.cc, node_crypto.cc)"]
+    end
+    subgraph CoreEngine["Core System Dependencies"]
+        V8["Google V8 Engine (JS Execution & Memory Heap)"]
+        Libuv["libuv (Event Loop, Thread Pool & Async I/O)"]
+        OpenSSL["OpenSSL (TLS/Crypto)"]
+        Zlib["zlib (Compression)"]
+        Cares["c-ares (Async DNS)"]
+        LLHTTP["llhttp (HTTP Parsing)"]
+    end
+    subgraph OSLayer["Operating System Kernel"]
+        OSIO["Non-Blocking OS I/O (epoll / kqueue / IOCP)"]
+        ThreadPool["Libuv Worker Thread Pool (4-1024 threads)"]
+    end
+
+    JS --> Modules --> Bindings
+    Bindings --> V8
+    Bindings --> Libuv
+    Libuv --> OSIO
+    Libuv --> ThreadPool
 ```
 
-Create a file named `app.js`:
+### 1.2 Google V8 Engine: Ignition, TurboFan, and JIT Optimization
+V8 compiles JavaScript directly to native machine code without interpreting it beforehand. It employs a two-tier compilation pipeline:
 
+```mermaid
+flowchart LR
+    Source["JavaScript Source Code"] --> Parser["V8 Parser"]
+    Parser --> AST["Abstract Syntax Tree (AST)"]
+    AST --> Ignition["Ignition Interpreter"]
+    Ignition --> Bytecode["V8 Bytecode Execution"]
+    Bytecode --> Profiler["Type Feedback Vector Profiler"]
+    Profiler -->|"Hot Functions (Frequent Execution)"| TurboFan["TurboFan Optimizing Compiler"]
+    TurboFan --> MachineCode["Highly Optimized Native Machine Code"]
+    TurboFan -.->|"Deoptimization (Type Feedback Mismatch)"| Ignition
+```
+
+#### Code Example: Writing V8-Friendly Monomorphic Code
 ```javascript
-// app.js
-const appTitle = "Node.js Enterprise Server";
-const serverStartTime = new Date();
-
-console.log(`Starting ${appTitle}...`);
-console.log("Current working directory:", process.cwd());
-console.log("Host OS platform:", process.platform, "| Architecture:", process.arch);
-console.log("V8 Engine version:", process.versions.v8);
-```
-
-Execute your script in the terminal:
-
-```bash
-node app.js
-```
-
-#### Deep-Dive Line-by-Line Explanation:
-1. `const appTitle = "Node.js Enterprise Server"`:
-   - Declares an immutable identifier bound to a string primitive in memory.
-2. `process.cwd()`:
-   - The global `process` object provides programmatic access to the current Node.js execution environment. `.cwd()` returns the absolute path from which the process was launched.
-3. `process.platform`, `process.arch`:
-   - Returns operating system identifiers (e.g. `'win32'`, `'linux'`, `'darwin'`) and CPU architectures (`'x64'`, `'arm64'`), essential for cross-platform utility scripts.
-
----
-
-### Module Systems: CommonJS (`require`) vs ES Modules (`import`)
-
-Node.js supports two distinct module architectures:
-
-#### 1. CommonJS (CJS) - The Historic Standard
-CommonJS modules are evaluated **synchronously** at runtime using `require()`:
-
-```javascript
-// math.js
-function add(a, b) {
-  return a + b;
-}
-// Exporting an object containing the function
-module.exports = { add };
-
-// main.js
-const { add } = require("./math.js");
-console.log("Sum:", add(10, 25)); // Sum: 35
-```
-
-#### 2. ES Modules (ESM) - The Modern ECMAScript Standard
-Activated by adding `"type": "module"` inside your `package.json` or naming files with `.mjs`. Modules are parsed and evaluated asynchronously in three phases:
-
-```javascript
-// math.mjs
-export function multiply(a, b) {
-  return a * b;
+// MONOMORPHIC FUNCTION: Always called with identical object shape
+function calculateTotal(order) {
+  return order.price * order.quantity;
 }
 
-// main.mjs
-import { multiply } from "./math.mjs";
-console.log("Product:", multiply(4, 5)); // Product: 20
+// Order objects share identical Hidden Class (Map)
+const order1 = { price: 100, quantity: 2 };
+const order2 = { price: 50, quantity: 5 };
+
+console.log(calculateTotal(order1)); // V8 profiles { price, quantity }
+console.log(calculateTotal(order2)); // TurboFan optimizes to single machine instruction!
+
+// MEGAMORPHIC FUNCTION (Anti-pattern): Called with constantly changing shapes
+const orderBad1 = { price: 100, quantity: 2 };
+const orderBad2 = { quantity: 5, price: 50 }; // Different property order = Different Hidden Class!
+const orderBad3 = { price: 20, count: 4 };     // Different property name!
+
+// Forces TurboFan to deoptimize and fall back to Ignition interpreter
 ```
 
-#### Architectural Differences:
-- **`require()` is dynamic**: You can place `require()` inside `if` statements or loops. `import` statements are static and hoisted to the top of the file, allowing V8 to optimize dependencies and tree-shake unused code during build bundling.
-- **Top-Level `await`**: Supported natively in ES Modules without wrapping code inside an `async function main() { ... }`.
+### 1.3 V8 Memory Allocation: Call Stack, Heap, and Garbage Collection
+V8 divides memory into two primary zones:
+1. **Call Stack**: Fixed memory allocation tracking synchronous execution contexts and primitive values.
+2. **Memory Heap**: Dynamic memory allocation storing complex objects, closures, strings, and buffers.
 
----
-
-### Core Built-in Modules: `fs`, `path`, and `os`
-
-Node.js includes powerful standard modules without requiring any third-party npm packages:
-
-#### 1. File System Operations (`node:fs/promises`)
-```javascript
-import fs from "node:fs/promises";
-import path from "node:path";
-
-async function executeFileOps() {
-  const filePath = path.join(process.cwd(), "audit.log");
-  
-  // 1. Write data asynchronously (offloaded to Libuv thread pool)
-  await fs.writeFile(filePath, "System boot: " + new Date().toISOString() + "\n", "utf-8");
-  
-  // 2. Append additional records
-  await fs.appendFile(filePath, "Healthcheck status: OK\n", "utf-8");
-  
-  // 3. Read data back into memory
-  const logContent = await fs.readFile(filePath, "utf-8");
-  console.log("Audit log contents:\n" + logContent);
-}
-
-executeFileOps();
+```mermaid
+flowchart TD
+    subgraph V8Heap["V8 Memory Heap (~1.4GB on 64-bit by default)"]
+        NewSpace["New Space / Young Generation (1-64MB)<br/>Semi-spaces: Eden / From-Space / To-Space"]
+        OldPointer["Old Pointer Space<br/>Surviving objects containing references"]
+        OldData["Old Data Space<br/>Raw data payload (Strings, Boxed numbers)"]
+        LargeObject["Large Object Space<br/>Allocations exceeding New Space limit"]
+        CodeSpace["Code Space<br/>Compiled JIT Machine Code from TurboFan"]
+    end
 ```
 
-#### Deep-Dive Explanation:
-- Using `node:fs/promises` guarantees that disk reads and writes never block the JavaScript main thread. Under the hood, Libuv schedules file read/write system calls on its background C thread pool (`UV_THREADPOOL_SIZE`), resolving a JavaScript Promise once the OS disk controller completes the transfer.
+#### Garbage Collection Mechanics:
+- **Minor GC (Scavenger)**: Fast, frequent cleanup of New Space using Cheney's copying algorithm. Objects surviving 2 Scavenge cycles are promoted to Old Space.
+- **Major GC (Mark-Sweep-Compact)**: Runs when Old Space exceeds threshold. Pauses execution (Stop-The-World), traverses object graph from roots, marks reachable objects, sweeps unreachable memory, and compacts fragmented memory.
 
-#### 2. Cross-Platform Path Normalization (`node:path`)
-Never concatenate file paths using raw strings like `"folder/" + filename`. Windows uses backslashes (`\`), whereas Linux and macOS use forward slashes (`/`). `path.join()` detects the host OS and formats separators automatically:
-
-```javascript
-import path from "node:path";
-
-const configPath = path.join(process.cwd(), "config", "database.json");
-console.log("Normalized Path:", configPath);
-console.log("File Extension:", path.extname(configPath)); // Output: .json
-console.log("Base File Name:", path.basename(configPath)); // Output: database.json
-```
-
----
-
-### Creating a Native HTTP Web Server (`node:http`)
-
-You can launch a high-throughput HTTP server with zero external libraries:
+### 1.4 Hidden Classes and Inline Caching
+Because JavaScript is dynamically typed, property lookups in objects normally require expensive dictionary searches. V8 solves this by assigning internal **Hidden Classes (Shapes/Maps)** to objects at runtime:
 
 ```javascript
-import http from "node:http";
-
-// 1. Instantiate HTTP server instance with request listener callback
-const server = http.createServer((req, res) => {
-  const { method, url } = req;
-  
-  // Handle Healthcheck Endpoint
-  if (url === "/health" && method === "GET") {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ 
-      status: "healthy", 
-      uptime_seconds: process.uptime(),
-      memory_usage_mb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024)
-    }));
+// Hidden Class Evolution Demo
+class User {
+  constructor(name, email) {
+    this.name = name;   // Transition from Class C0 -> Class C1 (name offset 0)
+    this.email = email; // Transition from Class C1 -> Class C2 (email offset 1)
   }
+}
 
-  // Handle Root Landing Page
-  if (url === "/" && method === "GET") {
-    res.writeHead(200, { "Content-Type": "text/html" });
-    return res.end("<h1>Node.js Enterprise Web Platform</h1><p>Running natively.</p>");
-  }
+const u1 = new User('Alice', 'alice@test.com');
+const u2 = new User('Bob', 'bob@test.com');
+// u1 and u2 share the exact same Hidden Class C2 in memory!
 
-  // 404 Fallback
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ error: "Endpoint Not Found" }));
+// BAD PRACTICE: Dynamically adding properties later alters hidden class
+u1.role = 'admin'; // Creates new Class C3; u1 and u2 no longer share shapes!
+```
+
+### 1.5 The Libuv Event Loop: The 6 Phases in Depth
+The Event Loop is the heart of Node.js concurrency. It orchestrates asynchronous callbacks across 6 distinct phases in a continuous loop:
+
+```mermaid
+flowchart TD
+    Start(["Event Loop Start"]) --> P1["1. Timers Phase<br/>(setTimeout, setInterval callbacks)"]
+    P1 --> P2["2. Pending Callbacks Phase<br/>(Deferred I/O errors and callbacks)"]
+    P2 --> P3["3. Idle, Prepare Phase<br/>(Internal Libuv housekeeping)"]
+    P3 --> P4["4. Poll Phase<br/>(Retrieve new I/O events, execute I/O callbacks)"]
+    P4 --> P5["5. Check Phase<br/>(setImmediate callbacks)"]
+    P5 --> P6["6. Close Callbacks Phase<br/>(socket.on('close'), server.close)"]
+    P6 --> CheckDone{"Are any timers, I/O, or handles active?"}
+    CheckDone -- Yes --> P1
+    CheckDone -- No --> End(["Process Exits (Exit Code 0)"])
+```
+
+| Phase | Handled Callbacks | Typical Operations |
+| :--- | :--- | :--- |
+| **1. Timers** | Expired timer callbacks | `setTimeout()`, `setInterval()` |
+| **2. Pending** | System-level I/O callbacks | TCP socket errors (e.g., `ECONNREFUSED` reported late by OS) |
+| **3. Idle/Prepare** | Internal libuv operations | Hook used internally by Node.js runtime before polling |
+| **4. Poll** | File, network & stream I/O | Reading from files, receiving HTTP request data, accepting connections |
+| **5. Check** | Immediate callbacks | `setImmediate()` runs directly after poll phase completes |
+| **6. Close** | Socket & handle cleanup | `socket.on('close')`, cleanup handlers |
+
+### 1.6 Microtasks vs Macrotasks: `process.nextTick()` vs `Promise`
+Between **every single phase** and between **every individual callback** executed in the Event Loop, Node.js drains the **Microtask Queue**:
+
+```mermaid
+flowchart TD
+    CurrentCallback["Current Callback Finishes"] --> CheckTick{"Are there process.nextTick callbacks?"}
+    CheckTick -- Yes --> DrainTick["Execute ALL process.nextTick callbacks"]
+    DrainTick --> CheckTick
+    CheckTick -- No --> CheckPromise{"Are there Promise microtasks?"}
+    CheckPromise -- Yes --> DrainPromise["Execute ALL Promise.then / queueMicrotask"]
+    DrainPromise --> CheckTick
+    CheckPromise -- No --> NextPhase["Move to Next Event Loop Callback / Phase"]
+```
+
+#### Code Example: Verifying Microtask vs Macrotask Execution Order
+```javascript
+import fs from 'node:fs';
+
+console.log('1. Synchronous Mainline');
+
+setTimeout(() => {
+  console.log('7. Timers Phase: setTimeout 0ms');
+}, 0);
+
+setImmediate(() => {
+  console.log('8. Check Phase: setImmediate');
 });
 
-// 2. Bind TCP listener to port 3000
-const PORT = 3000;
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server actively accepting connections at http://localhost:${PORT}`);
-});
-```
-
-#### Exhaustive Line-by-Line Explanation:
-1. `http.createServer((req, res) => { ... })`:
-   - Instructs Libuv to create a TCP socket and register an OS event listener (`epoll`/`kqueue`/`IOCP`).
-   - `req` (`http.IncomingMessage`): A readable stream containing HTTP request method, URL, headers, and incoming payload chunks.
-   - `res` (`http.ServerResponse`): A writable stream used to send HTTP status codes, response headers, and serialized body bytes back to the client.
-2. `res.writeHead(200, { "Content-Type": "application/json" })`:
-   - Writes the HTTP status code (200 OK) and sends the HTTP response headers over the TCP socket immediately.
-3. `res.end(JSON.stringify(...))`:
-   - Flushes the final data payload and signals to the client that the HTTP message has finished transmitting (closing the connection or keeping it alive for HTTP/1.1 pipelining).
-
----
-
-### The Node Package Manager (npm) & `package.json`
-
-Every production Node.js project is structured around a `package.json` manifest:
-
-```json
-{
-  "name": "enterprise-node-service",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "express": "^5.0.1"
-  },
-  "devDependencies": {
-    "vitest": "^3.0.0",
-    "typescript": "^5.7.0"
-  }
-}
-```
-
-#### Essential Commands & SemVer Cheatsheet:
-- **`npm init -y`**: Generates a default `package.json` non-interactively.
-- **`npm install <package>`**: Downloads the library into `node_modules` and records it under `dependencies`.
-- **`npm install -D <package>`**: Records the library under `devDependencies` (testing, compilers).
-- **`node --watch <file>`**: Modern built-in hot-reloader (Node 18+) that restarts your server automatically whenever you save code edits.
-- **Semantic Versioning (SemVer: `MAJOR.MINOR.PATCH`)**:
-  - `^5.0.1` (Caret): Automatically upgrades minor and patch versions (`>= 5.0.1 < 6.0.0`).
-  - `~5.0.1` (Tilde): Only upgrades patch bug fixes (`>= 5.0.1 < 5.1.0`).
-
----
-
-### Asynchronous JavaScript: Callbacks, Promises & `async/await`
-
-Because Node.js runs JavaScript on a single thread, **you must never use synchronous blocking operations** (e.g. `fs.readFileSync`) in request handlers:
-
-```javascript
-// 1. Simulating an asynchronous database query returning a Promise
-function queryUserFromDatabase(userId) {
-  return new Promise((resolve, reject) => {
-    // Non-blocking timer simulated via Libuv timers phase
-    setTimeout(() => {
-      if (userId <= 0) {
-        return reject(new Error("Invalid User ID"));
-      }
-      resolve({ id: userId, name: "Alice Smith", role: "DevOps Architect" });
-    }, 100);
+process.nextTick(() => {
+  console.log('3. Microtask: process.nextTick 1');
+  process.nextTick(() => {
+    console.log('4. Microtask: Nested process.nextTick 2');
   });
+});
+
+Promise.resolve().then(() => {
+  console.log('5. Microtask: Promise.resolve 1');
+}).then(() => {
+  console.log('6. Microtask: Promise.resolve 2');
+});
+
+queueMicrotask(() => {
+  console.log('5b. Microtask: queueMicrotask');
+});
+
+console.log('2. Synchronous Mainline End');
+
+// PREDICTED EXACT OUTPUT:
+// 1. Synchronous Mainline
+// 2. Synchronous Mainline End
+// 3. Microtask: process.nextTick 1
+// 4. Microtask: Nested process.nextTick 2
+// 5. Microtask: Promise.resolve 1
+// 5b. Microtask: queueMicrotask
+// 6. Microtask: Promise.resolve 2
+// 7. Timers Phase: setTimeout 0ms
+// 8. Check Phase: setImmediate
+```
+
+### 1.7 Libuv Thread Pool: `UV_THREADPOOL_SIZE` & Non-Blocking OS I/O
+A widespread misconception is that Node.js is purely single-threaded. While user JavaScript runs on a single thread, **libuv maintains a multi-threaded C worker pool** for operations that operating systems cannot perform non-blockingly:
+
+```mermaid
+flowchart TD
+    JSReq["Node.js Asynchronous Operation"] --> CheckType{"Operation Type?"}
+    CheckType -->|"Network I/O (TCP, UDP, HTTP)"| OSNonBlocking["OS Native Non-Blocking API<br/>(Linux: epoll, macOS: kqueue, Win: IOCP)"]
+    CheckType -->|"File System, Crypto, DNS, Zlib"| WorkerPool["Libuv Thread Pool<br/>(Default: 4 threads, Max: 1024)"]
+    OSNonBlocking --> EventLoopDone["Event Loop Notification"]
+    WorkerPool --> EventLoopDone
+```
+
+#### Which Operations Use the Thread Pool?
+- **File System Operations**: All `fs.*` calls (`fs.readFile`, `fs.writeFile`, `fs.stat`). (POSIX has no universal non-blocking file I/O).
+- **Cryptographic Operations**: CPU-bound functions (`crypto.pbkdf2`, `crypto.scrypt`, `crypto.randomBytes`).
+- **DNS Resolution**: `dns.lookup()` (uses the blocking synchronous `getaddrinfo(3)` OS syscall).
+- **Compression**: All `zlib.*` compression and decompression operations.
+
+#### Modifying Thread Pool Size:
+```bash
+# Must be set before starting Node process
+UV_THREADPOOL_SIZE=16 node server.js
+```
+
+## 2. Stage 2: Core Native Modules & Complete API Encyclopedia
+
+### 2.1 File System (`node:fs` & `node:fs/promises`)
+The `node:fs` module enables interaction with the file system. Modern Node.js provides three distinct paradigms:
+1. **Synchronous**: Blocks the entire Event Loop (Strictly avoid in production request handlers!).
+2. **Callback-based**: Legacy Node error-first callbacks `(err, data) => {}`.
+3. **Promise-based (`node:fs/promises`)**: Modern, async/await friendly, highly scalable.
+
+```mermaid
+flowchart TD
+    FS["node:fs API"] --> Sync["Synchronous (fs.readFileSync) - BLOCKS EVENT LOOP"]
+    FS --> Callback["Callback (fs.readFile) - Legacy"]
+    FS --> PromiseAPI["Promise (fs/promises) - Recommended for async/await"]
+    FS --> StreamAPI["Stream (fs.createReadStream) - Recommended for >50MB Files"]
+```
+
+#### 1. Reading & Writing Files with `node:fs/promises`
+```javascript
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+async function fileOperations() {
+  const filePath = path.join(process.cwd(), 'data.json');
+
+  // Writing formatted JSON
+  const payload = { id: 101, name: 'Alice', active: true };
+  await fs.writeFile(filePath, JSON.stringify(payload, null, 2), 'utf8');
+  console.log('File written successfully');
+
+  // Reading file contents
+  const rawData = await fs.readFile(filePath, 'utf8');
+  const parsed = JSON.parse(rawData);
+  console.log('Parsed content:', parsed.name);
+
+  // Appending data
+  await fs.appendFile(filePath, '\n// Appended log entry', 'utf8');
+
+  // Clean up
+  await fs.unlink(filePath);
+  console.log('File cleaned up');
 }
 
-// 2. Consuming with modern async / await and structured try/catch
-async function handleUserRequest(userId) {
+fileOperations().catch(console.error);
+```
+
+#### 2. Working with Directories (`mkdir`, `readdir`, `rm`)
+```javascript
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+async function directoryMastery() {
+  const dirPath = path.join(process.cwd(), 'logs', '2026', 'q3');
+
+  // Create nested directories recursively (like mkdir -p)
+  await fs.mkdir(dirPath, { recursive: true });
+
+  // Create dummy files
+  await fs.writeFile(path.join(dirPath, 'app.log'), 'Log entry 1');
+  await fs.writeFile(path.join(dirPath, 'error.log'), 'Error entry 1');
+
+  // Read directory entries with file types
+  const entries = await fs.readdir(dirPath, { withFileTypes: true });
+  for (const entry of entries) {
+    console.log(`Entry: ${entry.name}, isFile=${entry.isFile()}, isDir=${entry.isDirectory()}`);
+  }
+
+  // Remove directory and all children recursively (like rm -rf)
+  await fs.rm(path.join(process.cwd(), 'logs'), { recursive: true, force: true });
+  console.log('Directory cleaned up');
+}
+
+directoryMastery();
+```
+
+#### 3. Low-Level File Handles & Descriptors (`open`, `read`, `write`, `fstat`)
+For high-performance I/O or partial random access without loading the whole file into RAM:
+```javascript
+import fs from 'node:fs/promises';
+
+async function lowLevelFileHandle() {
+  const fileHandle = await fs.open('large_dataset.bin', 'r');
   try {
-    console.log("Querying database in background...");
-    const user = await queryUserFromDatabase(userId);
-    console.log("Successfully fetched user:", user.name);
-    return user;
-  } catch (error) {
-    console.error("Database query failed:", error.message);
-    throw error;
+    const stats = await fileHandle.stat();
+    console.log('File size in bytes:', stats.size);
+
+    // Read exactly 16 bytes starting at offset 128
+    const buffer = Buffer.alloc(16);
+    const { bytesRead } = await fileHandle.read(buffer, 0, 16, 128);
+    console.log(`Read ${bytesRead} bytes:`, buffer);
+  } finally {
+    // ALWAYS close file handles to prevent file descriptor leaks
+    await fileHandle.close();
+  }
+}
+```
+
+---
+
+### 2.2 Path Management (`node:path`)
+The `node:path` module provides utilities for resolving, parsing, and normalizing file and directory paths across Windows (`\\`) and POSIX (`/`) environments.
+
+```mermaid
+flowchart LR
+    A["Raw Path Segments"] --> Join["path.join() (Normalizes & joins)"]
+    A --> Resolve["path.resolve() (Creates absolute path from cwd)"]
+    PathString["'/home/user/app/server.js'"] --> Parse["path.parse()"]
+    Parse --> Obj["{ root: '/', dir: '/home/user/app', base: 'server.js', ext: '.js', name: 'server' }"]
+```
+
+#### Complete Code Walkthrough: Cross-Platform Path Handling
+```javascript
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+// 1. In ES Modules, emulate __dirname and __filename
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+console.log('Current File:', __filename);
+console.log('Current Dir:', __dirname);
+
+// 2. path.join: Concatenates segments and normalizes separators
+const configPath = path.join(__dirname, 'config', '..', 'config', 'production.json');
+console.log('Joined & Normalized:', configPath);
+
+// 3. path.resolve: Treats segments from right to left as absolute anchors
+const absPath = path.resolve('src', 'index.ts');
+console.log('Absolute Path:', absPath);
+
+// 4. path.parse and path.format
+const parsed = path.parse(__filename);
+console.log('Parsed Object:', parsed);
+// { root: 'C:\\', dir: '...', base: 'index.js', ext: '.js', name: 'index' }
+
+// Reconstruct path
+const formatted = path.format({
+  dir: parsed.dir,
+  name: 'backup_' + parsed.name,
+  ext: '.bak'
+});
+console.log('Formatted Path:', formatted);
+
+// 5. Relative distance between two paths
+const rel = path.relative('/app/src/services', '/app/src/utils/math.js');
+console.log('Relative Path:', rel); // '../utils/math.js'
+```
+
+---
+
+### 2.3 Operating System & Hardware (`node:os`)
+The `node:os` module exposes low-level operating system and hardware metrics needed for clustering, scaling, and diagnostic health checks.
+
+```javascript
+import os from 'node:os';
+
+console.log('--- Operating System Metrics ---');
+console.log('Platform:', os.platform()); // 'linux', 'darwin', 'win32'
+console.log('Architecture:', os.arch()); // 'x64', 'arm64'
+console.log('OS Type:', os.type()); // 'Linux', 'Darwin', 'Windows_NT'
+console.log('Kernel Release:', os.release());
+console.log('System Uptime (hrs):', (os.uptime() / 3600).toFixed(2));
+console.log('User Home Directory:', os.homedir());
+console.log('Hostname:', os.hostname());
+
+console.log('\n--- CPU & Memory Hardware ---');
+const cpus = os.cpus();
+console.log(`Total CPU Cores: ${cpus.length} (Model: ${cpus[0].model})`);
+
+const totalMemGB = (os.totalmem() / (1024 ** 3)).toFixed(2);
+const freeMemGB = (os.freemem() / (1024 ** 3)).toFixed(2);
+console.log(`Memory: ${freeMemGB} GB Free / ${totalMemGB} GB Total`);
+
+// Calculate dynamic cluster worker count based on physical cores
+export function getRecommendedWorkerCount() {
+  const cores = os.cpus().length;
+  return Math.max(1, cores - 1); // Preserve 1 core for OS & I/O
+}
+```
+
+---
+
+### 2.4 Event-Driven Architecture (`node:events`)
+Much of the Node.js core API is built around an idiomatic event-driven architecture where certain objects ("emitters") emit named events that cause `Function` objects ("listeners") to be called.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App as Application Logic
+    participant Emitter as EventEmitter Instance
+    participant L1 as Listener 1 (Email Service)
+    participant L2 as Listener 2 (Audit Logger)
+
+    App->>Emitter: emitter.on('orderCreated', callback)
+    App->>Emitter: emitter.emit('orderCreated', { id: 42, total: 99.0 })
+    Emitter->>L1: Invoke callback(orderData)
+    Emitter->>L2: Invoke callback(orderData)
+    Note over Emitter: Callbacks run synchronously in registration order!
+```
+
+#### Production EventEmitter Implementation
+```javascript
+import { EventEmitter, once } from 'node:events';
+
+class OrderProcessingEngine extends EventEmitter {
+  constructor() {
+    // Enable captureRejections to forward async promise rejections to 'error' event
+    super({ captureRejections: true });
+  }
+
+  async placeOrder(orderId, amount) {
+    if (amount <= 0) {
+      this.emit('error', new Error('Invalid order amount'));
+      return;
+    }
+
+    console.log(`Processing Order #${orderId}...`);
+    this.emit('orderStarted', { orderId, timestamp: Date.now() });
+
+    // Simulate async operation
+    await new Promise(r => setTimeout(r, 100));
+
+    this.emit('orderCompleted', { orderId, amount, status: 'SUCCESS' });
   }
 }
 
-handleUserRequest(101);
-```
+const engine = new OrderProcessingEngine();
 
----
-
-## 2. Stage 2: Intermediate Runtime Architecture & Topology
-
----
-
-### The Node.js System Architecture Layer
-
-Node.js is not a programming language or an isolated framework; it is a cross-platform runtime environment built upon **Google's V8 JavaScript Engine** and **Libuv**:
-
-```
-+-------------------------------------------------------------------------+
-|                         APPLICATION LAYER (JAVASCRIPT / TS)             |
-|                  Your Business Code, Express, Fastify, NestJS           |
-+-------------------------------------------------------------------------+
-                                     |
-                                     v
-+-------------------------------------------------------------------------+
-|                         NODE.JS STANDARD LIBRARY (CORE API)             |
-|              fs, http, net, stream, crypto, path, worker_threads        |
-+-------------------------------------------------------------------------+
-                                     |
-                                     v
-+-------------------------------------------------------------------------+
-|                         NODE.JS BINDINGS & NODE-API (C++)               |
-|      Glue code wrapping V8 and native C/C++ libraries into JS objects    |
-+-------------------------------------------------------------------------+
-                    |                                  |
-                    v                                  v
-+-----------------------------------+  +----------------------------------+
-|          V8 JIT ENGINE            |  |             LIBUV                |
-|  - ECMAScript Parser & AST        |  |  - Non-Blocking Event Loop       |
-|  - Ignition (Bytecode Interpreter)|  |  - OS Event Demultiplexer        |
-|  - Sparkplug & Maglev Compilers   |  |    (epoll, kqueue, IOCP)         |
-|  - TurboFan (Optimizing JIT)      |  |  - Thread Pool (Async File I/O,  |
-|  - Orinoco Garbage Collector      |  |    DNS, Crypto, Zlib)            |
-+-----------------------------------+  +----------------------------------+
-                    |                                  |
-                    +----------------+-----------------+
-                                     |
-                                     v
-+-------------------------------------------------------------------------+
-|                       SUPPORTING NATIVE LIBRARIES                       |
-|   - OpenSSL: TLS/SSL & Cryptography  - zlib: Deflate / Compression      |
-|   - llhttp: Ultra-fast HTTP Parser   - c-ares: Asynchronous DNS Queries |
-+-------------------------------------------------------------------------+
-                                     |
-                                     v
-+-------------------------------------------------------------------------+
-|                       OPERATING SYSTEM KERNEL                           |
-|       (Sockets, File Descriptors, Epoll, Kqueue, IOCP, System Threads)  |
-+-------------------------------------------------------------------------+
-```
-
----
-
-## 3. Stage 3: V8 Engine & Libuv Event Loop Internals
-
-### V8 Engine Deep Dive
-
-### V8 Pipeline: Ignition, Sparkplug, Maglev & TurboFan
-
-V8 executes JavaScript through a multi-tier compilation pipeline designed to balance instantaneous startup latency with long-term execution throughput:
-
-```
-                          JavaScript Source Code
-                                    |
-                                    v
-                           [ Parser / Lexer ]
-                                    |
-                                    v
-                        [ Abstract Syntax Tree (AST) ]
-                                    |
-                                    v
-                    [ Ignition (Bytecode Interpreter) ]
-                                    |
-            +-----------------------+-----------------------+
-            | (Fast startup, gathers type feedback)          |
-            v                                               v
-  [ Sparkplug Compiler ]                          [ Type Feedback Vector ]
-  (Fast non-optimizing 1:1 bytecode compilation)             |
-                                                            v
-                                                  [ Maglev Compiler ]
-                                                  (Mid-tier optimizing JIT)
-                                                            |
-                                                            v
-                                                  [ TurboFan Compiler ]
-                                                  (Aggressive speculative JIT)
-                                                            |
-                                              Deoptimization Bailout?
-                                              (Type feedback violated)
-                                                            |
-                                                            v
-                                                  Revert to Ignition
-```
-
-1. **Ignition (Bytecode Interpreter)**:
-   - Rapidly translates AST into concise bytecode.
-   - Lowers memory footprint significantly compared to compiling directly to native machine code.
-   - Gathers execution profile data and runtime type feedback (e.g. types passed to functions).
-2. **Sparkplug (Baseline Compiler)**:
-   - Compiles bytecode directly to native machine code in a single linear pass without optimization.
-   - Accelerates execution speed by 2x–3x without paying the compilation latency cost of TurboFan.
-3. **Maglev (Mid-Tier Compiler - Node.js 20+)**:
-   - Balances fast compilation with good code generation speed, bridging the performance gap between Sparkplug and TurboFan.
-4. **TurboFan (Optimizing Compiler)**:
-   - Uses the type feedback vector collected by Ignition to make aggressive speculative optimizations (function inlining, loop unrolling, dead code elimination, escape analysis).
-   - If a function is called with unexpected argument types (e.g. string passed to an integer addition function), TurboFan triggers a **Deoptimization Bailout**, ejecting the optimized machine code and reverting to Ignition bytecode execution.
-
----
-
-### Hidden Classes (Shapes) & Inline Caching (IC)
-
-Because JavaScript is dynamically typed, object properties are not at fixed memory offsets. To achieve C++-like struct access speeds, V8 creates internal **Hidden Classes (Shapes)**:
-
-```
-Object A: { x: 1, y: 2 }              Object B: { x: 5, y: 10 }
-        |                                     |
-        v                                     v
-   [ Map C0 ] (Empty Object)             [ Map C0 ] (Empty Object)
-        | Add property 'x'                    | Add property 'x'
-        v                                     v
-   [ Map C1 ] (offset 0: 'x')            [ Map C1 ] (offset 0: 'x')
-        | Add property 'y'                    | Add property 'y'
-        v                                     v
-   [ Map C2 ] (offset 0: 'x', offset 1: 'y')  [ Map C2 ] (Same Shape Shared!)
-```
-
-#### Inline Caching Call Sites
-V8 tracks call sites accessing properties:
-- **Monomorphic**: Accesses objects sharing the exact same Hidden Class (`obj.x`). V8 compiles property access down to a single pointer dereference with zero hash table lookup.
-- **Polymorphic**: Handles 2 to 4 different shapes. Implements a fast switch-case branch.
-- **Megamorphic**: Handles 5+ distinct shapes. Falls back to slow dictionary hash-table lookups.
-
-> [!TIP]
-> **Performance Rule**: Always initialize object properties in the exact same order in constructor functions to prevent shape transitions and avoid megamorphic deoptimizations!
-
----
-
-### V8 Memory Heap Architecture
-
-```
-+-------------------------------------------------------------------------+
-|                             TOTAL RESIDENT SET (RSS)                    |
-|                                                                         |
-|  +-------------------------------------------------------------------+  |
-|  |                            V8 HEAP MEMORY                         |  |
-|  |                                                                   |  |
-|  |  +---------------------------+  +-------------------------------+ |  |
-|  |  |         NEW SPACE         |  |           OLD SPACE           | |  |
-|  |  |  (1MB - 64MB, Semi-Spaces)|  |  - Old Pointer Space          | |  |
-|  |  |  [From-Space] [To-Space]  |  |  - Old Data Space             | |  |
-|  |  +---------------------------+  +-------------------------------+ |  |
-|  |                                                                   |  |
-|  |  +---------------------------+  +-------------------------------+ |  |
-|  |  |    Large Object Space     |  |          Code Space           | |  |
-|  |  |  (Objects exceeding page) |  |   (Compiled JIT machine code) | |  |
-|  |  +---------------------------+  +-------------------------------+ |  |
-|  +-------------------------------------------------------------------+  |
-|                                                                         |
-|  +------------------------------------+  +---------------------------+  |
-|  |          Node.js Buffers           |  |     C++ Native Memory     |  |
-|  |   (Off-heap raw memory slices)     |  | (Libuv handles, OpenSSL)  |  |
-|  +------------------------------------+  +---------------------------+  |
-+-------------------------------------------------------------------------+
-```
-
-1. **New Space (Young Generation)**:
-   - Sized between 1MB and 64MB (`--min-semi-space-size`, `--max-semi-space-size`).
-   - Divided into two contiguous buffers: **From-Space** and **To-Space**.
-   - Most allocated objects die young (Generational Hypothesis).
-2. **Old Space (Old Generation)**:
-   - Contains long-lived objects promoted (tenured) after surviving two Scavenge GC cycles.
-   - Sized up to `--max-old-space-size` (default ~2GB on 64-bit systems).
-3. **Large Object Space**:
-   - Objects that exceed the allocation page threshold are allocated directly here and never moved by garbage collection.
-
----
-
-### Garbage Collection: Orinoco, Scavenger & Major Mark-Sweep-Compact
-
-V8 employs two distinct garbage collectors:
-1. **Minor GC (Scavenger - Cheney's Copying Algorithm)**:
-   - Operates strictly on New Space.
-   - Halts execution briefly; copies all surviving live objects from **From-Space** into **To-Space** contiguously (compacting them automatically).
-   - Swaps From-Space and To-Space roles.
-   - Objects surviving two scavenge passes are promoted to **Old Space**.
-2. **Major GC (Mark-Sweep-Compact - Orinoco Engine)**:
-   - Operates on Old Space when memory approaches threshold.
-   - **Marking**: Identifies reachable objects via root set traversal (Concurrent & Incremental marking to eliminate large stop-the-world pauses).
-   - **Sweeping**: Frees memory slots occupied by dead objects and adds them to free lists.
-   - **Compacting**: Slides surviving objects together to eliminate external heap fragmentation.
-
----
-
-### Libuv & The Event Loop Internals
-
-### OS Demultiplexing: epoll, kqueue & IOCP
-
-Node.js delegates non-blocking network socket and file descriptor monitoring to the operating system's native event demultiplexer:
-- **Linux**: `epoll` (edge-triggered / level-triggered event notification).
-- **macOS / BSD**: `kqueue` (scalable event notification).
-- **Windows**: `IOCP` (Input/Output Completion Ports).
-
-Instead of spawning a dedicated thread per connection (like Apache HTTP Server or traditional multi-threaded servers), Node.js registers interest in file descriptors with Libuv. When network packets arrive or sockets become writable, the OS wakes up Libuv's event loop with zero polling CPU burn.
-
----
-
-### The 6 Phases of the Event Loop
-
-The Libuv event loop progresses through six distinct phases in each iteration ("tick"):
-
-```
-   +-----------------------+
-+->|        timers         |  setTimeout(), setInterval()
-|  +-----------------------+
-|              |
-|  +-----------------------+
-|  |   pending callbacks   |  Deferred system I/O callbacks (TCP errors, etc.)
-|  +-----------------------+
-|              |
-|  +-----------------------+
-|  |     idle, prepare     |  Internal Libuv housekeeping
-|  +-----------------------+
-|              |
-|  +-----------------------+
-|  |         poll          |  Retrieves new I/O events; executes I/O callbacks;
-|  +-----------------------+  blocks here if no other work is scheduled
-|              |
-|  +-----------------------+
-|  |        check          |  setImmediate() callbacks execute here
-|  +-----------------------+
-|              |
-|  +-----------------------+
-+--|    close callbacks    |  socket.on('close', ...), handle destruction
-   +-----------------------+
-```
-
-1. **Timers Phase**:
-   - Executes callbacks scheduled by `setTimeout()` and `setInterval()`.
-   - Timers are stored in a min-heap priority queue sorted by expiration timestamp. The event loop checks the head of the heap; if expired, it executes the callback; otherwise it moves to the next phase.
-2. **Pending Callbacks Phase**:
-   - Executes I/O callbacks deferred from the previous loop iteration (e.g. certain system errors like `ECONNREFUSED` reported by operating systems).
-3. **Idle, Prepare Phase**:
-   - Used strictly for internal Libuv engine preparation before polling for I/O.
-4. **Poll Phase**:
-   - Calculates how long it should block and poll for I/O events.
-   - Executes callbacks for all I/O events that have completed (network packets, incoming HTTP requests, database socket responses).
-   - If the poll queue is empty:
-     - If `setImmediate()` callbacks are waiting, the poll phase ends immediately to advance to the **Check** phase.
-     - If no `setImmediate()` is waiting, the loop blocks waiting for I/O until the nearest timer expires.
-5. **Check Phase**:
-   - Dedicated phase exclusively for callbacks scheduled via `setImmediate()`.
-   - Allows scripts to execute logic immediately after the poll phase finishes processing I/O.
-6. **Close Callbacks Phase**:
-   - Handles sudden socket or handle terminations (e.g. `socket.destroy()` or `socket.on('close')`), releasing underlying file descriptors.
-
----
-
-### Libuv Thread Pool Mechanics (UV_THREADPOOL_SIZE)
-
-Not all operations in modern operating systems are non-blocking! Specifically:
-- **File System Operations**: Most OS filesystems (POSIX `read`, `write`, `stat`) do not support true asynchronous non-blocking I/O across all scenarios.
-- **DNS Resolution**: `dns.lookup()` invokes the synchronous C-library `getaddrinfo(3)`.
-- **CPU-Intensive Crypto**: `crypto.pbkdf2()`, `crypto.scrypt()`, password hashing, RSA key generation.
-- **Compression**: `zlib` deflate/inflate algorithms.
-
-To prevent these blocking operations from freezing the single JavaScript event loop thread, Libuv offloads them to an internal worker **Thread Pool**:
-
-```
-+-------------------------------------------------------------------------+
-|                        JAVASCRIPT MAIN THREAD                           |
-|       (Executes V8 code, triggers fs.readFile / crypto.pbkdf2)          |
-+-------------------------------------------------------------------------+
-                                     |
-                                     v
-+-------------------------------------------------------------------------+
-|                        LIBUV THREAD POOL QUEUE                          |
-|                                                                         |
-|      [ Worker 1 ]       [ Worker 2 ]       [ Worker 3 ]       [ Worker 4 ]
-|    (fs.readFile)      (crypto.pbkdf2)     (Idle / Free)      (dns.lookup)
-+-------------------------------------------------------------------------+
-                                     |
-               Worker completes operation -> notifies Event Loop
-                                     v
-+-------------------------------------------------------------------------+
-|                        POLL / PENDING CALLBACK                          |
-|             (JavaScript callback invoked on Main Thread)                |
-+-------------------------------------------------------------------------+
-```
-
-- **Default Size**: 4 worker threads.
-- **Configuring Sizing**: Configured via the environment variable `UV_THREADPOOL_SIZE` (must be set before Node starts, up to 1024):
-  ```bash
-  UV_THREADPOOL_SIZE=16 node dist/server.js
-  ```
-- **Thread Starvation**: If 4 simultaneous heavy crypto hashing calls run concurrently, all 4 threads are occupied. Any subsequent `fs.readFile()` or `dns.lookup()` will be blocked in queue until a thread frees up!
-
----
-
-### Asynchronous Execution Model: Microtasks vs Macrotasks
-
-### Microtask Queues: process.nextTick vs Promise.then
-
-In Node.js, asynchronous operations are categorized into **Macrotasks** (managed by Libuv phases) and **Microtasks** (managed in JavaScript engine queues):
-
-```
-                        Current Execution Context
-                                    |
-                                    v
-                  +----------------------------------+
-                  |    process.nextTick Queue        |  Highest Priority Microtask
-                  +----------------------------------+
-                                    | (Drain completely)
-                                    v
-                  +----------------------------------+
-                  |  Promise Microtask Queue         |  Standard Microtasks
-                  |  (Promise.then, queueMicrotask)  |
-                  +----------------------------------+
-                                    | (Drain completely)
-                                    v
-                  +----------------------------------+
-                  |       Libuv Event Loop Phase     |  Macrotask Phase
-                  |  (Timers, Poll, Check, etc.)     |
-                  +----------------------------------+
-```
-
-1. **`process.nextTick` Queue**:
-   - Not technically part of the Libuv event loop.
-   - Drained immediately after the currently running operation finishes, before any other microtasks or macrotasks.
-   - **Recursion Danger**: Recursive `process.nextTick` calls will completely starve the event loop, preventing all I/O and timers from ever firing!
-2. **Promise Microtask Queue**:
-   - Stores resolved Promise `.then()`, `.catch()`, `.finally()`, and `queueMicrotask()` callbacks.
-   - Evaluated immediately after the `process.nextTick` queue is exhausted.
-
----
-
-### Modern Tick Interleaving & Event Loop Draining
-
-In Node.js 11+, the execution model was aligned with the browser HTML5 microtask specification:
-- **Legacy Node (<= 10)**: Microtasks were drained only between Libuv phase transitions.
-- **Modern Node (>= 11, including Node 20/22)**: **Microtask queues are drained immediately after every individual callback**, regardless of which phase is running!
-
-```typescript
-setTimeout(() => {
-  console.log('Timer 1');
-  Promise.resolve().then(() => console.log('Promise in Timer 1'));
-}, 0);
-
-setTimeout(() => {
-  console.log('Timer 2');
-}, 0);
-
-// Output in modern Node:
-// Timer 1
-// Promise in Timer 1   <-- Microtask drains IMMEDIATELY before Timer 2 runs!
-// Timer 2
-```
-
----
-
-### setTimeout(fn, 0) vs setImmediate(fn) Determinism
-
-A classic Node.js architectural question: which executes first?
-
-#### Scenario A: Top-Level Module Scope (Non-Deterministic)
-```javascript
-setTimeout(() => console.log('timeout'), 0);
-setImmediate(() => console.log('immediate'));
-```
-- **Behavior**: Non-deterministic (either may fire first).
-- **Reason**: `setTimeout(..., 0)` internally normalizes to `setTimeout(..., 1)` (1ms minimum). When the event loop starts, if the process entry and loop initialization took less than 1ms, the timer is not yet expired, and the loop advances past Timers to the Check phase (`setImmediate` runs first). If it took > 1ms, the timer is expired and runs first.
-
-#### Scenario B: Inside an I/O Cycle (Fully Deterministic)
-```javascript
-import fs from 'node:fs';
-
-fs.readFile(__filename, () => {
-  setTimeout(() => console.log('timeout'), 0);
-  setImmediate(() => console.log('immediate'));
+// Standard listener
+engine.on('orderStarted', (meta) => {
+  console.log(`[Event: orderStarted] Order #${meta.orderId}`);
 });
-```
-- **Behavior**: **`setImmediate` ALWAYS executes first!**
-- **Reason**: The `fs.readFile` callback runs in the **Poll Phase**. Once it returns, the event loop must check for `setImmediate` before looping back to Timers. Since a `setImmediate` is queued, the loop immediately transitions to the **Check Phase** and executes it before wrapping around to the **Timers Phase**.
 
----
+// Single-fire listener (auto-removed after first execution)
+engine.once('orderCompleted', (data) => {
+  console.log(`[Event: orderCompleted once] Successfully charged $${data.amount}`);
+});
 
-## 4. Stage 4: Advanced Streams, Buffers & Memory Mechanics
+// CRITICAL: Always attach an 'error' listener! Unhandled 'error' events crash the process!
+engine.on('error', (err) => {
+  console.error('[Engine Error]', err.message);
+});
 
-### Buffer Allocation: Buffer.alloc vs Buffer.allocUnsafe & Off-Heap Memory
-
-Node.js `Buffer` instances represent fixed-length sequences of raw binary bytes allocated **outside the V8 JavaScript heap** in C++ memory:
-
-```typescript
-// Safe allocation: Clears and zeroes out all allocated memory
-const safeBuf = Buffer.alloc(1024); // 1KB initialized to 0x00
-
-// High-speed allocation: Does NOT zero out memory!
-const fastBuf = Buffer.allocUnsafe(1024); // Contains uninitialized residual memory!
-```
-
-> [!CAUTION]
-> **Security Vulnerability**: `Buffer.allocUnsafe` allocates uninitialized memory that may contain sensitive data (TLS private keys, passwords, database records) previously discarded by the process. Never stream `Buffer.allocUnsafe` slices directly to clients without overwriting them completely via `.fill()`!
-
-#### Buffer Pool Slicing
-To minimize OS `malloc` overhead for small buffers, Node.js pre-allocates an internal 8KB memory pool (`Buffer.poolSize = 8192`). Allocations of size `<= Buffer.poolSize / 2` (4096 bytes) are sliced directly from this shared array buffer.
-
----
-
-### The 4 Stream Paradigms: Readable, Writable, Duplex & Transform
-
-Streams are instances of `EventEmitter` designed to handle data chunks incrementally without holding the entire dataset in RAM:
-
-```
-1. Readable: Data source (e.g. fs.createReadStream, req in HTTP server)
-   Events: 'data', 'end', 'error', 'close'
-
-2. Writable: Data sink (e.g. fs.createWriteStream, res in HTTP server)
-   Methods: write(chunk), end()
-   Events: 'drain', 'finish', 'error'
-
-3. Duplex: Bidirectional (both Readable & Writable, e.g. net.Socket)
-   Has separate read and write internal buffers.
-
-4. Transform: Duplex stream where output is dynamically computed from input
-   (e.g. zlib.createGzip, crypto.createCipheriv).
-```
-
----
-
-### Backpressure Protocol: highWaterMark & Drain Semantics
-
-When a fast data producer sends data to a slow data consumer (e.g. reading a 10Gbps NVMe file to stream over a 1Mbps cellular network connection), memory will explode unless regulated by **Backpressure**:
-
-```
-[ Fast Producer ] ------ Chunks ------> [ Internal Buffer (highWaterMark) ] ---- Slow Consumer ---->
-                                                        |
-                                            Threshold Exceeded?
-                                                        |
-                                          write() returns FALSE!
-                                                        |
-                                          Producer Pauses Reads
-                                                        |
-                                        Buffer Drains to Consumer
-                                                        |
-                                          Consumer Emits 'drain'
-                                                        |
-                                          Producer Resumes Reads
-```
-
-#### Manual Backpressure Implementation
-```typescript
-import fs from 'node:fs';
-
-function copyWithBackpressure(sourcePath: string, destPath: string) {
-  const readable = fs.createReadStream(sourcePath, { highWaterMark: 64 * 1024 });
-  const writable = fs.createWriteStream(destPath, { highWaterMark: 64 * 1024 });
-
-  readable.on('data', (chunk) => {
-    // If internal write buffer is full, pause the readable stream
-    const canContinue = writable.write(chunk);
-    if (!canContinue) {
-      readable.pause();
-    }
-  });
-
-  // When buffer has emptied, resume reading
-  writable.on('drain', () => {
-    readable.resume();
-  });
-
-  readable.on('end', () => {
-    writable.end();
-  });
+// Using events.once as a Promise
+async function waitForOrder() {
+  engine.placeOrder(101, 250.0);
+  const [completedOrder] = await once(engine, 'orderCompleted');
+  console.log('Promise resolved on event:', completedOrder.orderId);
 }
+
+waitForOrder();
 ```
 
 ---
 
-### Zero-Copy Streaming & pipeline Composition
+### 2.5 Binary Data & Buffers (`node:buffer`)
+Before the introduction of TypedArray in ECMAScript, the JavaScript language had no mechanism for reading or manipulating streams of binary data. The `Buffer` class was introduced as part of the Node.js API to enable interaction with octet streams in TCP streams, file system operations, and networking.
 
-Never use legacy `.pipe()` in production! `.pipe()` does NOT forward errors automatically; an error on the readable stream leaves the writable stream dangling and unclosed, leaking file descriptors.
+```mermaid
+flowchart TD
+    Raw["Raw Bytes (V8 Off-Heap Memory)"] --> BufferObj["Buffer Instance (e.g. <Buffer 48 65 6c 6c 6f>)"]
+    BufferObj --> StringUTF8["buf.toString('utf8') -> 'Hello'"]
+    BufferObj --> StringHex["buf.toString('hex') -> '48656c6c6f'"]
+    BufferObj --> StringB64["buf.toString('base64') -> 'SGVsbG8='"]
+```
 
-Always use **`node:stream/promises`** with **`pipeline`**:
-```typescript
-import { pipeline } from 'node:stream/promises';
+#### Complete Buffer Manipulation Code
+```javascript
+import { Buffer } from 'node:buffer';
+
+// 1. Safe zero-filled memory allocation
+const bufSafe = Buffer.alloc(10); // 10 bytes initialized to zero
+console.log('Safe Buffer:', bufSafe);
+
+// 2. Fast unsafe allocation (Uninitialized memory - DO NOT leak to client without writing!)
+const bufUnsafe = Buffer.allocUnsafe(10);
+
+// 3. Buffer from string with explicit encoding
+const strBuf = Buffer.from('Hello Node.js 🚀', 'utf8');
+console.log('Byte length (UTF-8 bytes):', strBuf.length); // 18 bytes (emoji is 4 bytes!)
+console.log('String character length:', 'Hello Node.js 🚀'.length); // 15 chars
+
+// 4. Base64 encoding & decoding
+const base64String = strBuf.toString('base64');
+console.log('Base64:', base64String);
+
+const decodedBuf = Buffer.from(base64String, 'base64');
+console.log('Decoded text:', decodedBuf.toString('utf8'));
+
+// 5. Buffer concatenation & slicing
+const part1 = Buffer.from('Prefix: ');
+const part2 = Buffer.from('Data payload');
+const combined = Buffer.concat([part1, part2]);
+console.log('Combined:', combined.toString());
+
+// Slicing shares the underlying memory buffer!
+const sub = combined.subarray(0, 6);
+console.log('Subarray:', sub.toString());
+```
+
+---
+
+### 2.6 Stream Processing & Backpressure (`node:stream`)
+Streams are collections of data—just like arrays or strings. The difference is that streams might not be available all at once, and they don't have to fit in memory. This makes streams immensely powerful when working with large amounts of data, or data that's coming from an external source one chunk at a time.
+
+```mermaid
+flowchart LR
+    Source["Large File (10GB)"] --> Readable["Readable Stream (fs.createReadStream)"]
+    Readable -->|"Chunks (64KB)"| Transform["Transform Stream (zlib.createGzip)"]
+    Transform -->|"Compressed Chunks"| Writable["Writable Stream (fs.createWriteStream)"]
+    Writable --> Destination["Destination File (1GB.gz)"]
+```
+
+#### The Backpressure Problem Demystified
+If a fast hard drive reads at $500	ext{MB/s}$ but a slow network client consumes at $1	ext{MB/s}$, unthrottled streaming will buffer hundreds of megabytes in Node.js RAM until the process crashes with Out-Of-Memory. **Backpressure** pauses the reader when the writer's buffer exceeds `highWaterMark`.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant R as Readable Stream
+    participant W as Writable Stream (Buffer: highWaterMark = 16KB)
+
+    R->>W: write(chunk) (Buffer: 8KB) -> returns true
+    R->>W: write(chunk) (Buffer: 16KB) -> returns false (BACKPRESSURE!)
+    Note over R: Readable stream pauses reading from disk
+    W->>W: Flushes buffer to OS socket
+    W-->>R: Emit 'drain' event (Buffer empty)
+    Note over R: Readable stream resumes reading from disk
+```
+
+#### Production Stream Pipeline with `pipeline` from `node:stream/promises`
+```javascript
 import fs from 'node:fs';
 import zlib from 'node:zlib';
+import { pipeline } from 'node:stream/promises';
+import { Transform } from 'node:stream';
 
-async function compressLogFile(input: string, output: string) {
-  const ac = new AbortController();
+// Custom Transform Stream that converts text to uppercase
+const upperCaseTransform = new Transform({
+  transform(chunk, encoding, callback) {
+    try {
+      const upper = chunk.toString().toUpperCase();
+      callback(null, upper);
+    } catch (err) {
+      callback(err);
+    }
+  }
+});
+
+async function streamProcessingPipeline() {
+  const sourceFile = 'raw_input.txt';
+  const destFile = 'processed_output.txt.gz';
+
+  // Create dummy test file
+  fs.writeFileSync(sourceFile, 'hello world! stream processing with backpressure in nodejs.');
 
   try {
+    // pipeline handles error propagation and automatically destroys all streams on completion/failure!
     await pipeline(
-      fs.createReadStream(input),
-      zlib.createGzip({ level: 6 }),
-      fs.createWriteStream(output),
-      { signal: ac.signal } // Supports graceful cancellation
+      fs.createReadStream(sourceFile),
+      upperCaseTransform,
+      zlib.createGzip(),
+      fs.createWriteStream(destFile)
     );
-    console.log('Stream completed successfully with zero file descriptor leaks.');
-  } catch (err) {
-    console.error('Pipeline failed and all file descriptors closed cleanly:', err);
+    console.log('Pipeline completed successfully with zero memory overhead!');
+  } finally {
+    if (fs.existsSync(sourceFile)) fs.unlinkSync(sourceFile);
+    if (fs.existsSync(destFile)) fs.unlinkSync(destFile);
   }
+}
+
+streamProcessingPipeline().catch(console.error);
+```
+
+---
+
+### 2.7 HTTP & HTTPS Networking (`node:http`, `node:https`)
+Node.js includes built-in HTTP and HTTPS client and server modules that operate directly on streaming TCP sockets.
+
+```javascript
+import http from 'node:http';
+
+const server = http.createServer((req, res) => {
+  const { method, url, headers } = req;
+
+  // Route matching
+  if (method === 'GET' && url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'UP', timestamp: new Date().toISOString() }));
+    return;
+  }
+
+  if (method === 'POST' && url === '/api/data') {
+    let body = '';
+    
+    // Read request body as chunks arrive
+    req.on('data', (chunk) => {
+      body += chunk.toString();
+      // Guard against payload flooding attack (>1MB)
+      if (body.length > 1e6) {
+        res.writeHead(413, { 'Content-Type': 'text/plain' });
+        res.end('Payload Too Large');
+        req.destroy();
+      }
+    });
+
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body);
+        res.writeHead(201, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ received: parsed, status: 'CREATED' }));
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.end('Invalid JSON payload');
+      }
+    });
+    return;
+  }
+
+  res.writeHead(404, { 'Content-Type': 'text/plain' });
+  res.end('Not Found');
+});
+
+server.listen(3000, () => {
+  console.log('HTTP Server listening on http://localhost:3000');
+});
+```
+
+---
+
+### 2.8 Cryptography & Security (`node:crypto`)
+The `node:crypto` module provides cryptographic functionality that includes a set of wrappers for OpenSSL's hash, HMAC, cipher, decipher, sign, and verify functions.
+
+```mermaid
+flowchart TD
+    Crypto["node:crypto"] --> Hash["Hashing: SHA-256 / SHA-512 (One-Way)"]
+    Crypto --> HMAC["HMAC: Hash with Secret Key (Integrity & Authenticity)"]
+    Crypto --> Symmetric["Symmetric Encryption: AES-256-GCM (Encrypted + Auth Tag)"]
+    Crypto --> Asymmetric["Asymmetric: RSA / ECDSA (Public/Private Key Pairs)"]
+    Crypto --> KDF["Key Derivation: scrypt / Argon2 / pbkdf2"]
+```
+
+#### Complete Cryptography Suite: AES-256-GCM Authenticated Encryption
+```javascript
+import crypto from 'node:crypto';
+
+const ALGORITHM = 'aes-256-gcm';
+const IV_LENGTH = 12; // 96-bit recommended for GCM
+
+export function encryptPayload(plaintext, secretKey32Bytes) {
+  const iv = crypto.randomBytes(IV_LENGTH);
+  const cipher = crypto.createCipheriv(ALGORITHM, secretKey32Bytes, iv);
+
+  let encrypted = cipher.update(plaintext, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+
+  // GCM provides an authentication tag that prevents tampering
+  const authTag = cipher.getAuthTag();
+
+  return {
+    iv: iv.toString('hex'),
+    authTag: authTag.toString('hex'),
+    ciphertext: encrypted
+  };
+}
+
+export function decryptPayload(encryptedObj, secretKey32Bytes) {
+  const iv = Buffer.from(encryptedObj.iv, 'hex');
+  const authTag = Buffer.from(encryptedObj.authTag, 'hex');
+  const decipher = crypto.createDecipheriv(ALGORITHM, secretKey32Bytes, iv);
+
+  decipher.setAuthTag(authTag); // Verifies data integrity
+
+  let decrypted = decipher.update(encryptedObj.ciphertext, 'hex', 'utf8');
+  decrypted += decipher.final('utf8'); // Throws if ciphertext was modified!
+
+  return decrypted;
+}
+
+// Verification Test
+const key = crypto.randomBytes(32); // 256 bits
+const secretMessage = "Confidential financial transaction payload";
+const encrypted = encryptPayload(secretMessage, key);
+console.log('Encrypted:', encrypted);
+
+const decrypted = decryptPayload(encrypted, key);
+console.log('Decrypted successfully:', decrypted);
+
+// Constant-time string comparison to prevent Timing Attacks
+const tokenA = Buffer.from('secret-auth-token-123');
+const tokenB = Buffer.from('secret-auth-token-123');
+const isMatch = crypto.timingSafeEqual(tokenA, tokenB);
+console.log('Constant-Time Match:', isMatch);
+```
+
+---
+
+### 2.9 Multi-Threaded Parallelism (`node:worker_threads`)
+The `node:worker_threads` module enables the use of threads that execute JavaScript in parallel. Unlike child processes, worker threads share memory space efficiently.
+
+```mermaid
+flowchart TD
+    MainThread["Main Thread (Event Loop, HTTP Server)"] -->|"workerData / postMessage"| W1["Worker Thread 1 (Isolate V8, CPU Hashing)"]
+    MainThread -->|"workerData / postMessage"| W2["Worker Thread 2 (Isolate V8, Image Resize)"]
+    W1 -->|"postMessage(result)"| MainThread
+    W2 -->|"postMessage(result)"| MainThread
+    MainThread <-->|"Zero-Copy Shared Memory"| SharedMem[("SharedArrayBuffer & Atomics")]
+    W1 <--> SharedMem
+```
+
+#### Code Example: CPU Heavy Fibonacci in Worker Thread
+```javascript
+// worker-demo.mjs
+import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
+import { fileURLToPath } from 'node:url';
+
+if (isMainThread) {
+  console.log('Main Thread: Spawning worker for heavy computation...');
+
+  const worker = new Worker(fileURLToPath(import.meta.url), {
+    workerData: { num: 42 }
+  });
+
+  worker.on('message', (result) => {
+    console.log(`Main Thread received result from worker: ${result}`);
+  });
+
+  worker.on('error', console.error);
+  worker.on('exit', (code) => {
+    if (code !== 0) console.error(`Worker stopped with exit code ${code}`);
+  });
+
+  console.log('Main Thread remains non-blocking and responsive!');
+} else {
+  // Heavy CPU blocking computation inside isolated worker thread
+  function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+  }
+
+  const result = fibonacci(workerData.num);
+  parentPort.postMessage(result);
 }
 ```
 
 ---
 
-## 5. Stage 5: Multi-Core Scaling & Enterprise Security
+### 2.10 Multi-Process Clustering (`node:cluster`)
+A single instance of Node.js runs in a single thread. To take advantage of multi-core systems, the `node:cluster` module allows you to easily create child processes that all share server ports.
 
-### Multi-Core Scaling, Concurrency & Parallelism
-
-### Cluster Module & Process-Level Scalability
-
-Because a single Node.js instance runs on a single CPU core, multi-core hardware requires process-level scaling using the built-in **`node:cluster`** module:
-
-```
-+-------------------------------------------------------------------------+
-|                        PRIMARY (MASTER) PROCESS                         |
-|     (Listens on Port 3000, distributes incoming TCP socket descriptors)  |
-+-------------------------------------------------------------------------+
-             |                           |                           |
-             | IPC (Round-Robin)         | IPC (Round-Robin)         | IPC
-             v                           v                           v
-+------------------------+  +------------------------+  +------------------------+
-|    Worker 1 (PID 101)  |  |    Worker 2 (PID 102)  |  |    Worker 3 (PID 103)  |
-|  Separate V8 Instance  |  |  Separate V8 Instance  |  |  Separate V8 Instance  |
-|  Independent Memory    |  |  Independent Memory    |  |  Independent Memory    |
-+------------------------+  +------------------------+  +------------------------+
+```mermaid
+flowchart TD
+    Primary["Primary Process (Master Cluster Manager)"] -->|"fork() & Port 8000 Binding"| W1["Worker 1 (CPU Core 0)"]
+    Primary -->|"fork() & Port 8000 Binding"| W2["Worker 2 (CPU Core 1)"]
+    Primary -->|"fork() & Port 8000 Binding"| W3["Worker 3 (CPU Core 2)"]
+    Primary -->|"fork() & Port 8000 Binding"| W4["Worker 4 (CPU Core 3)"]
+    OSNet["Incoming Client TCP Connections"] -->|"Round-Robin Distribution"| Primary
 ```
 
-```typescript
+#### Production Cluster with Zero-Downtime Rolling Restarts
+```javascript
 import cluster from 'node:cluster';
 import http from 'node:http';
 import os from 'node:os';
 
-const numCPUs = os.cpus().length;
-
 if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running. Forking ${numCPUs} workers...`);
+  const numCPUs = os.cpus().length;
+  console.log(`Primary master ${process.pid} is running. Forking ${numCPUs} workers...`);
 
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
 
   cluster.on('exit', (worker, code, signal) => {
-    console.warn(`Worker ${worker.process.pid} died. Forking replacement...`);
-    cluster.fork();
+    console.warn(`Worker ${worker.process.pid} died (code: ${code}, signal: ${signal}). Spawning replacement...`);
+    cluster.fork(); // Automatic self-healing resurrection
   });
 } else {
-  // Workers share the same underlying server port
+  // Workers share the TCP connection on port 8000
   http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end(`Handled by worker PID ${process.pid}\n`);
-  }).listen(3000);
-}
-```
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end(`Handled by worker process PID: ${process.pid}\n`);
+  }).listen(8000);
 
-- **Load Balancing**: On Linux/macOS, the primary uses a Round-Robin algorithm to distribute incoming socket connections evenly.
-- **Port Sharing**: The OS socket is opened in the primary process; file descriptors are passed to worker processes via Unix domain sockets / named pipes.
-
----
-
-### Worker Threads: Isolates, MessagePort & SharedArrayBuffer
-
-Introduced in Node.js 12+, **`node:worker_threads`** provides true multi-threading inside a single operating system process:
-
-```
-+-------------------------------------------------------------------------+
-|                        NODE.JS OPERATING SYSTEM PROCESS                 |
-|                                                                         |
-|  +---------------------------------+   +-----------------------------+  |
-|  |           MAIN THREAD           |   |        WORKER THREAD        |  |
-|  | - V8 Isolate 1 (Event Loop)     |   | - V8 Isolate 2 (Event Loop) |  |
-|  | - Express HTTP Server           |   | - CPU Number Crunching      |  |
-|  +---------------------------------+   +-----------------------------+  |
-|                  |                                    |                 |
-|                  +---------- MessagePort IPC ---------+                 |
-|                  |     (Structured Clone Algorithm)   |                 |
-|                  |                                    |                 |
-|                  +------ SharedArrayBuffer + Atomics -+                 |
-|                         (Zero-Copy Shared Memory)                       |
-+-------------------------------------------------------------------------+
-```
-
-#### Message Passing with Structured Clone Algorithm
-Data passed between threads via `postMessage()` is serialized and deserialized using the HTML5 structured clone algorithm by default.
-
-#### Zero-Copy Memory Sharing with Atomics
-For ultra-high-throughput applications (audio/image processing, high-frequency finance), threads can share raw memory using `SharedArrayBuffer` with synchronization via `Atomics`:
-
-```typescript
-import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
-
-if (isMainThread) {
-  // Allocate 4 bytes of shared memory (1 Int32)
-  const sharedBuffer = new SharedArrayBuffer(4);
-  const sharedArray = new Int32Array(sharedBuffer);
-
-  const worker = new Worker(new URL(import.meta.url), {
-    workerData: { sharedBuffer }
-  });
-
-  worker.on('online', () => {
-    console.log('Worker is online. Waiting for atomic notification...');
-    // Block until worker changes value and wakes main thread
-    Atomics.wait(sharedArray, 0, 0);
-    console.log(`Woken up! Value changed to: ${Atomics.load(sharedArray, 0)}`);
-  });
-} else {
-  const { sharedBuffer } = workerData;
-  const sharedArray = new Int32Array(sharedBuffer);
-
-  setTimeout(() => {
-    // Atomically store value 42 and wake 1 waiting thread
-    Atomics.store(sharedArray, 0, 42);
-    Atomics.notify(sharedArray, 0, 1);
-  }, 1000);
+  console.log(`Worker ${process.pid} started`);
 }
 ```
 
 ---
 
-### Child Processes: spawn vs fork vs exec vs execFile
+### 2.11 Asynchronous Execution Context (`node:async_hooks` & `AsyncLocalStorage`)
+In distributed enterprise architectures, tracking a `correlationId` or `traceId` through deeply nested async call chains normally requires passing arguments to every function ("parameter drilling"). `AsyncLocalStorage` provides thread-local storage semantics across asynchronous boundaries:
 
-| Method | Spawns Shell? | Buffering | Best Use Case |
-| :--- | :---: | :---: | :--- |
-| **`spawn()`** | No (by default) | Streams (`stdout`, `stderr`) | Large data volume, long-running processes, streaming CLI utilities. |
-| **`exec()`** | Yes (`/bin/sh`) | Buffers into memory (`maxBuffer`) | Quick shell commands with pipes (`ls -la \| grep txt`). Dangerous with unsanitized input! |
-| **`execFile()`** | No | Buffers into memory | Executing a known binary executable directly without shell overhead. |
-| **`fork()`** | No | Streams + IPC channel | Spawning separate Node.js processes with built-in `send()` / `message` IPC. |
-
----
-
-## 6. Stage 6: Diagnostics, Profiling & 40 Staff Interview Questions
-
-### Diagnostics, Memory Leaks & Performance Profiling
-
-### Diagnosing Memory Leaks: Retained Object Trees & Closures
-
-A memory leak occurs when an object is no longer needed by business logic, but remains reachable through the **GC Root Set** (global variables, active closures, DOM/DOM-like trees, long-lived EventEmitter subscriptions).
-
-#### Common Leak Patterns
-1. **Accidental Global Variables**:
-   ```typescript
-   function leak() {
-     // Missing 'const' or 'let' binds to global/globalThis in non-strict mode
-     leakedCache = []; 
-   }
-   ```
-2. **Dangling EventEmitter Listeners**:
-   Adding listeners to shared event emitters without invoking `.removeListener()` or using `AbortSignal`:
-   ```typescript
-   // Leaks memory on every request:
-   eventEmitter.on('update', handleUpdate);
-
-   // Safe pattern using AbortSignal:
-   eventEmitter.on('update', handleUpdate, { signal: req.abortSignal });
-   ```
-3. **Unbounded In-Memory Caches**:
-   Storing items in a plain `Map` or object without LRU eviction or TTL pruning. Always use an LRU cache (e.g. `lru-cache`) with strict entry limits.
-
----
-
-### Heap Snapshots & DevTools Analysis
-
-To capture and inspect V8 memory heap allocations at runtime:
-
-```typescript
-import v8 from 'node:v8';
-import fs from 'node:fs';
-
-export function takeHeapSnapshot(filepath: string) {
-  const snapshotStream = v8.getHeapSnapshot();
-  const fileStream = fs.createWriteStream(filepath);
-  snapshotStream.pipe(fileStream);
-}
+```mermaid
+flowchart LR
+    Req["HTTP Request (X-Request-Id: 'req_abc123')"] --> ALSRun["asyncLocalStorage.run({ requestId }, handler)"]
+    ALSRun --> AsyncDB["await db.findUser()"]
+    AsyncDB --> AsyncLog["logger.info() (Retrieves requestId automatically)"]
+    AsyncLog --> AsyncThirdParty["await fetchPaymentGateway()"]
+    AsyncThirdParty --> Resp["Response (Consistent Context Maintained)"]
 ```
 
-1. Generate two snapshots: **Snapshot 1 (Baseline)** and **Snapshot 2 (After Load/Requests)**.
-2. Load both `.heapsnapshot` files into **Chrome DevTools -> Memory Tab**.
-3. Select **Comparison View** and sort by **# Delta** or **Size Delta**.
-4. Inspect the **Retaining Tree** to identify the root reference pinning the leaked objects in RAM.
-
----
-
-### CPU Profiling & Flame Graph Analysis
-
-To identify synchronous CPU bottlenecks blocking the event loop:
-
-```bash
-# Run Node with V8 CPU profiler
-node --prof dist/server.js
-
-# Benchmark application with load testing
-autocannon -c 100 -d 30 http://localhost:3000
-
-# Process the generated isolate tick log
-node --prof-process isolate-0x*.log > processed-cpu-profile.txt
-```
-
----
-
-### Event Loop Lag Tracking & AsyncLocalStorage
-
-#### 1. Event Loop Lag Monitoring (`perf_hooks`)
-Measure how many milliseconds the event loop is blocked from processing callbacks:
-```typescript
-import { monitorEventLoopDelay } from 'node:perf_hooks';
-
-const histogram = monitorEventLoopDelay({ resolution: 20 });
-histogram.enable();
-
-setInterval(() => {
-  console.log(`Event Loop Lag p50: ${(histogram.percentile(50) / 1e6).toFixed(2)} ms`);
-  console.log(`Event Loop Lag p99: ${(histogram.percentile(99) / 1e6).toFixed(2)} ms`);
-  histogram.reset();
-}, 5000);
-```
-
-#### 2. Distributed Tracing via `AsyncLocalStorage`
-Maintains execution context across asynchronous boundaries (promises, timers, callbacks) without manual parameter drilling:
-```typescript
+```javascript
 import { AsyncLocalStorage } from 'node:async_hooks';
-
-export const requestContext = new AsyncLocalStorage<{ requestId: string; userId: string }>();
-
-// Express middleware
-app.use((req, res, next) => {
-  const store = {
-    requestId: req.headers['x-request-id'] as string || crypto.randomUUID(),
-    userId: 'user-123'
-  };
-  requestContext.run(store, () => {
-    next();
-  });
-});
-
-// Deep within a repository or service layer:
-export function logAudit(action: string) {
-  const ctx = requestContext.getStore();
-  console.log(`[Request: ${ctx?.requestId}] Audit action: ${action}`);
-}
-```
-
----
-
-### Enterprise Security & Hardening
-
-### Prototype Pollution Prevention
-Attacker injects properties into `Object.prototype`, altering the behavior of all objects across the application:
-
-```typescript
-// Vulnerable recursive merge:
-function unsafeMerge(target: any, source: any) {
-  for (const key in source) {
-    if (typeof source[key] === 'object') {
-      if (!target[key]) target[key] = {};
-      unsafeMerge(target[key], source[key]);
-    } else {
-      target[key] = source[key];
-    }
-  }
-}
-
-// Defense 1: Reject __proto__, constructor, prototype keys
-const BANNED_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
-function safeMerge(target: any, source: any) {
-  for (const key of Object.keys(source)) {
-    if (BANNED_KEYS.has(key)) continue;
-    // Safe assignment
-  }
-}
-
-// Defense 2: Freeze the prototype at application boot
-Object.freeze(Object.prototype);
-```
-
----
-
-### ReDoS (Regular Expression Denial of Service)
-Vulnerable regular expressions with overlapping nested quantifiers (e.g. `/(a+)+$/`) cause **catastrophic backtracking**, turning execution time from O(N) into O(2^N):
-
-```typescript
-// VULNERABLE: Catastrophic backtracking on "aaaaaaaaaaaaaaaaaaaaaaaaaaaa!"
-const evilRegex = /^([a-zA-Z0-9]+)*$/;
-
-// SECURE: Strict atomic groups or simple linear string searches
-const safeRegex = /^[a-zA-Z0-9]+$/;
-```
-
----
-
-### Timing-Safe Cryptographic Comparisons
-
-Standard equality checks (`===`) leak information through variable execution time: string comparisons abort at the very first mismatched character, allowing attackers to reconstruct authentication tokens byte-by-byte:
-
-```typescript
+import http from 'node:http';
 import crypto from 'node:crypto';
 
-export function verifyApiToken(providedToken: string, expectedToken: string): boolean {
-  const bufA = Buffer.from(providedToken);
-  const bufB = Buffer.from(expectedToken);
+const asyncLocalStorage = new AsyncLocalStorage();
 
-  if (bufA.length !== bufB.length) {
-    return false;
+function log(message) {
+  const store = asyncLocalStorage.getStore();
+  const reqId = store ? store.get('requestId') : 'SYSTEM';
+  console.log(`[Request-ID: ${reqId}] ${message}`);
+}
+
+async function performDatabaseQuery() {
+  await new Promise(r => setTimeout(r, 50));
+  log('Database query executed successfully');
+}
+
+http.createServer((req, res) => {
+  const requestId = req.headers['x-request-id'] || crypto.randomUUID();
+  const contextMap = new Map([['requestId', requestId]]);
+
+  // Wrap request lifecycle inside AsyncLocalStorage
+  asyncLocalStorage.run(contextMap, async () => {
+    log('Incoming HTTP request received');
+    await performDatabaseQuery();
+    log('Sending response to client');
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'OK', requestId }));
+  });
+}).listen(4000);
+```
+
+
+### 2.13 Raw Networking: TCP & UDP (`node:net`, `node:dgram`)
+The `node:net` module provides an asynchronous network API for creating stream-based TCP or IPC servers and clients. The `node:dgram` module provides an implementation of UDP datagram sockets.
+
+```mermaid
+flowchart TD
+    subgraph TCP["TCP Socket (node:net) - Connection-Oriented, Guaranteed Delivery"]
+        S1["net.createServer()"] <-->|"3-Way Handshake & Persistent Stream"| C1["net.createConnection()"]
+    end
+    subgraph UDP["UDP Socket (node:dgram) - Connectionless, Low-Latency Datagrams"]
+        S2["dgram.createSocket('udp4')"] -.->|"Unreliable Packet Stream"| C2["socket.send(buffer, port, host)"]
+    end
+```
+
+#### 1. Production TCP Server & Client with Backpressure
+```javascript
+import net from 'node:net';
+
+// High-performance TCP Echo Server
+const tcpServer = net.createServer((socket) => {
+  console.log(`TCP Client connected from ${socket.remoteAddress}:${socket.remotePort}`);
+
+  socket.on('data', (data) => {
+    console.log(`Received ${data.length} bytes: ${data.toString('utf8')}`);
+    // Echo data back with backpressure protection
+    const canContinue = socket.write(`ECHO: ${data}`);
+    if (!canContinue) {
+      console.warn('Socket buffer full. Pausing incoming reads...');
+      socket.pause();
+    }
+  });
+
+  socket.on('drain', () => {
+    console.log('Socket buffer drained. Resuming reads.');
+    socket.resume();
+  });
+
+  socket.on('end', () => {
+    console.log('Client disconnected gracefully');
+  });
+
+  socket.on('error', (err) => {
+    console.error('Socket error:', err.message);
+  });
+});
+
+tcpServer.listen(9000, () => {
+  console.log('TCP Server listening on port 9000');
+});
+```
+
+#### 2. High-Throughput UDP Datagram Socket
+```javascript
+import dgram from 'node:dgram';
+
+// UDP Receiver
+const udpServer = dgram.createSocket('udp4');
+
+udpServer.on('message', (msg, rinfo) => {
+  console.log(`UDP packet from ${rinfo.address}:${rinfo.port}: ${msg.toString()}`);
+});
+
+udpServer.on('listening', () => {
+  const addr = udpServer.address();
+  console.log(`UDP Server listening on ${addr.address}:${addr.port}`);
+});
+
+udpServer.bind(41234);
+
+// UDP Sender
+const client = dgram.createSocket('udp4');
+const message = Buffer.from('Heartbeat metric payload');
+client.send(message, 41234, 'localhost', (err) => {
+  if (err) console.error(err);
+  client.close();
+});
+```
+
+---
+
+### 2.14 Data Compression (`node:zlib`)
+The `node:zlib` module provides compression functionality implemented using Gzip, Deflate/Inflate, and Brotli.
+
+```mermaid
+flowchart LR
+    SourceData["Uncompressed Text / JSON (1000 KB)"] --> Compress{"Compression Algorithm"}
+    Compress -->|Gzip| GZ["output.gz (~250 KB)"]
+    Compress -->|Brotli| BR["output.br (~180 KB - Highest Compression!)"]
+    Compress -->|Deflate| DF["output.zz (~260 KB)"]
+```
+
+#### Comprehensive Compression Suite
+```javascript
+import zlib from 'node:zlib';
+import { promisify } from 'node:util';
+
+const gzip = promisify(zlib.gzip);
+const gunzip = promisify(zlib.gunzip);
+const brotliCompress = promisify(zlib.brotliCompress);
+const brotliDecompress = promisify(zlib.brotliDecompress);
+
+async function compressionBenchmark() {
+  const payload = Buffer.from('Node.js performance engineering and memory optimization '.repeat(200));
+  console.log(`Original Size: ${payload.length} bytes`);
+
+  // 1. Gzip Compression
+  const gzipped = await gzip(payload);
+  console.log(`Gzip Size: ${gzipped.length} bytes (${((1 - gzipped.length/payload.length)*100).toFixed(1)}% savings)`);
+
+  const unGzipped = await gunzip(gzipped);
+  console.log('Gzip roundtrip match:', unGzipped.equals(payload));
+
+  // 2. Brotli Compression (Modern standard for static web assets)
+  const brotlied = await brotliCompress(payload, {
+    params: {
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 11 // Maximum compression quality (0-11)
+    }
+  });
+  console.log(`Brotli Size: ${brotlied.length} bytes (${((1 - brotlied.length/payload.length)*100).toFixed(1)}% savings)`);
+
+  const unBrotlied = await brotliDecompress(brotlied);
+  console.log('Brotli roundtrip match:', unBrotlied.equals(payload));
+}
+
+compressionBenchmark();
+```
+
+---
+
+### 2.15 Performance Hooks & High-Resolution Metrics (`node:perf_hooks`)
+The `node:perf_hooks` module provides high-resolution time measurements based on the W3C Web Performance API.
+
+```javascript
+import { performance, PerformanceObserver } from 'node:perf_hooks';
+
+// 1. Monitor Event Loop Latency / Delay
+const obs = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    console.log(`[Performance: ${entry.name}] duration=${entry.duration.toFixed(2)}ms`);
   }
+});
 
-  // Constant-time comparison: executes same CPU cycles regardless of match position
-  return crypto.timingSafeEqual(bufA, bufB);
+obs.observe({ entryTypes: ['measure', 'gc'], buffered: false });
+
+// 2. Micro-benchmarking with performance.mark and performance.measure
+performance.mark('hash-start');
+
+// Simulate work
+for (let i = 0; i < 1e6; i++) {
+  Math.sqrt(i);
+}
+
+performance.mark('hash-end');
+performance.measure('Sqrt-Loop-Performance', 'hash-start', 'hash-end');
+```
+
+---
+
+### 2.16 Utility Functions (`node:util`)
+The `node:util` module is designed to support the needs of Node.js internal APIs and provides essential functional tools:
+
+```javascript
+import util from 'node:util';
+import fs from 'node:fs';
+
+// 1. promisify: Converts error-first callbacks to native Promises
+const readFilePromise = util.promisify(fs.readFile);
+
+// 2. callbackify: Converts async functions to callback style
+async function calculate(a, b) {
+  return a + b;
+}
+const callbackCalc = util.callbackify(calculate);
+callbackCalc(5, 10, (err, res) => console.log('Callbackified Result:', res));
+
+// 3. util.types: Strict internal type assertions
+console.log('Is Date?', util.types.isDate(new Date())); // true
+console.log('Is Promise?', util.types.isPromise(Promise.resolve())); // true
+console.log('Is Uint8Array?', util.types.isUint8Array(new Uint8Array())); // true
+
+// 4. util.inspect: Deep object inspection with custom colors & depth
+const complexObject = { user: { profile: { settings: { theme: 'dark', tags: ['node', 'dev'] } } } };
+console.log(util.inspect(complexObject, { showHidden: false, depth: null, colors: true }));
+```
+
+---
+
+### 2.17 Native Test Runner & Assertions (`node:test`, `node:assert`)
+Starting in Node.js 18 and stable in 20+, Node provides a native, zero-dependency test runner that executes tests in milliseconds:
+
+```javascript
+// tests/sample.test.mjs
+import { describe, it, before, after, mock } from 'node:test';
+import assert from 'node:assert/strict';
+
+describe('Calculator Service Test Suite', () => {
+  before(() => {
+    console.log('Suite setup...');
+  });
+
+  after(() => {
+    console.log('Suite teardown...');
+  });
+
+  it('performs strict equality and object assertions', () => {
+    assert.equal(1 + 1, 2);
+    assert.deepEqual({ a: 1, b: [2, 3] }, { a: 1, b: [2, 3] });
+  });
+
+  it('verifies async promise rejection', async () => {
+    await assert.rejects(
+      async () => { throw new Error('Unauthorized'); },
+      { name: 'Error', message: 'Unauthorized' }
+    );
+  });
+
+  it('mocks timer functions deterministically', () => {
+    mock.timers.enable({ apis: ['setTimeout'] });
+    let fired = false;
+
+    setTimeout(() => { fired = true; }, 5000);
+    assert.equal(fired, false);
+
+    mock.timers.tick(5000); // Advance virtual time instantly!
+    assert.equal(fired, true);
+
+    mock.timers.reset();
+  });
+});
+```
+
+---
+
+### 2.12 Diagnostics & V8 Profiling (`node:v8`, `node:diagnostics_channel`)
+```javascript
+import v8 from 'node:v8';
+
+console.log('--- V8 Heap Statistics ---');
+const heapStats = v8.getHeapStatistics();
+console.log('Total Heap Size:', (heapStats.total_heap_size / (1024 * 1024)).toFixed(2), 'MB');
+console.log('Used Heap Size:', (heapStats.used_heap_size / (1024 * 1024)).toFixed(2), 'MB');
+console.log('Heap Size Limit:', (heapStats.heap_size_limit / (1024 * 1024)).toFixed(2), 'MB');
+
+// Programmatically generate a V8 Heap Snapshot on high memory threshold
+export function takeHeapSnapshotIfExceeded(thresholdMB) {
+  const currentMB = v8.getHeapStatistics().used_heap_size / (1024 * 1024);
+  if (currentMB > thresholdMB) {
+    const filename = `heap-${Date.now()}.heapsnapshot`;
+    v8.writeHeapSnapshot(filename);
+    console.warn(`Heap snapshot written to ${filename} due to memory threshold breach`);
+  }
 }
 ```
 
----
+## 3. Stage 3: Module Systems, Tooling & Modern Node 22+ Features
 
-### 40 Senior & Staff Node.js Interview Questions
+### 3.1 CommonJS vs ES Modules: Deep Architectural Comparison
+Node.js supports two module systems: CommonJS (CJS) and ECMAScript Modules (ESM).
 
-<details>
-<summary><strong>1. Explain the difference between process.nextTick and setImmediate in terms of scheduling and priority.</strong></summary>
-<code>process.nextTick()</code> is a microtask processed immediately after the current operation finishes on the call stack, before yielding control back to Libuv or draining standard Promise microtasks. Recursive <code>process.nextTick()</code> calls will starve the event loop. In contrast, <code>setImmediate()</code> is a macrotask executed in Libuv's dedicated <strong>Check Phase</strong>, running after I/O events in the Poll Phase are processed.
-</details>
-
-<details>
-<summary><strong>2. How did Node.js 11 change the microtask execution model compared to Node.js 10 and earlier?</strong></summary>
-Prior to Node.js 11, microtasks (Promises, <code>nextTick</code>) were drained only at phase boundaries of the Libuv event loop. Since Node.js 11 (including Node 20/22), Node.js complies with the HTML5 browser standard: microtask queues are drained immediately after every individual callback runs, even between two consecutive timers or two consecutive I/O callbacks.
-</details>
-
-<details>
-<summary><strong>3. What is the Libuv thread pool, what tasks execute on it, and how is it sized?</strong></summary>
-Libuv provides an internal worker thread pool to handle operations for which the host OS has no true non-blocking asynchronous system call. It handles: (1) all <code>fs</code> filesystem operations, (2) <code>dns.lookup()</code> (which uses synchronous <code>getaddrinfo</code>), (3) CPU-heavy crypto operations (<code>pbkdf2</code>, <code>scrypt</code>), and (4) <code>zlib</code> compression. Sized by the environment variable <code>UV_THREADPOOL_SIZE</code> (default 4, maximum 1024).
-</details>
-
-<details>
-<summary><strong>4. How does V8's Hidden Class (Shape) transition mechanism impact object property access performance?</strong></summary>
-Because JavaScript is dynamically typed, V8 assigns an internal Hidden Class (Map/Shape) to each object that stores the memory offset of its properties. When a new property is added, V8 creates a new shape and transitions the object to it. If objects initialize properties in differing orders, they end up with divergent shapes, degrading call sites from fast monomorphic inline caches (O(1) direct offset access) to slow megamorphic dictionary lookups.
-</details>
-
-<details>
-<summary><strong>5. Explain the Cheney's Copying Algorithm used in V8's New Space Scavenger GC.</strong></summary>
-New Space is divided into two equally sized semi-spaces: From-Space and To-Space. When From-Space fills, a minor GC pause occurs. The scavenger copies all surviving live objects contiguously into To-Space, compacting them automatically. Objects that have survived two scavenge cycles are tenured (promoted) to Old Space. Finally, the roles of From-Space and To-Space are swapped.
-</details>
-
-<details>
-<summary><strong>6. What is Backpressure in Node.js streams and what happens if you ignore it?</strong></summary>
-Backpressure is the flow-control protocol used when a data producer generates chunks faster than a consumer can process or write them. When the consumer's internal buffer exceeds <code>highWaterMark</code>, <code>writable.write(chunk)</code> returns <code>false</code>. If the producer ignores this and continues pushing data, unbounded memory buffering occurs in RAM, leading to out-of-memory process crashes.
-</details>
-
-<details>
-<summary><strong>7. Why is <code>stream.pipe()</code> considered dangerous in production compared to <code>stream.pipeline()</code>?</strong></summary>
-<code>stream.pipe()</code> does not properly handle error forwarding across the pipeline. If the source or intermediate stream emits an error, the destination stream is left open, causing serious file descriptor and memory socket leaks. <code>stream.pipeline()</code> automatically closes, destroys, and cleans up all streams if any stream in the chain emits an error or aborts.
-</details>
-
-<details>
-<summary><strong>8. What is the difference between Buffer.alloc and Buffer.allocUnsafe?</strong></summary>
-<code>Buffer.alloc(size)</code> allocates memory and zeroes it out (initializes all bytes to 0x00). <code>Buffer.allocUnsafe(size)</code> allocates raw memory without zeroing it out; it is faster, but the buffer may contain uninitialized memory containing sensitive historical data from prior process allocations.
-</details>
-
-<details>
-<summary><strong>9. How does <code>worker_threads</code> differ from the <code>cluster</code> module?</strong></summary>
-<code>cluster</code> forks separate operating system processes, each with its own full V8 instance, memory space, and Libuv loop. <code>worker_threads</code> creates separate OS threads within the same process, running isolated V8 execution contexts that can share memory via <code>SharedArrayBuffer</code> with zero IPC serialization overhead.
-</details>
-
-<details>
-<summary><strong>10. What is <code>AsyncLocalStorage</code> and how does it replace request-scoped context passing?</strong></summary>
-<code>AsyncLocalStorage</code> (built on <code>async_hooks</code>) allows storing state that persists across asynchronous execution chains (callbacks, promises, timer hops). It eliminates the need to pass context objects (like correlation IDs, user IDs, tracing spans) through every function signature in an application.
-</details>
-
-<details>
-<summary><strong>11. Why does <code>setTimeout(fn, 0)</code> sometimes execute after <code>setImmediate(fn)</code> in top-level code?</strong></summary>
-Node.js normalizes <code>setTimeout(..., 0)</code> to 1ms. When the Node process initializes, if entering the event loop takes less than 1ms, the timer is not yet expired, so the Timers phase is skipped and the loop advances to the Check phase where <code>setImmediate</code> executes first. If startup took more than 1ms, the timer expires and runs first.
-</details>
-
-<details>
-<summary><strong>12. Why does <code>setImmediate(fn)</code> ALWAYS execute before <code>setTimeout(fn, 0)</code> inside an I/O callback?</strong></summary>
-An I/O callback executes in the <strong>Poll Phase</strong>. When it schedules both timers, the next phase in the loop cycle is the <strong>Check Phase</strong>, which immediately executes <code>setImmediate()</code> before the loop can cycle around to the <strong>Timers Phase</strong>.
-</details>
-
-<details>
-<summary><strong>13. How do you detect and fix memory leaks caused by EventEmitters?</strong></summary>
-By default, an EventEmitter warns when more than 10 listeners are attached to a single event (<code>MaxListenersExceededWarning</code>). Leaks occur when listeners are added per request without being removed. Fixes: (1) use <code>emitter.once()</code> for single events, (2) explicitly remove listeners in cleanup blocks, or (3) pass an <code>AbortSignal</code> option: <code>emitter.on('event', fn, { signal: req.signal })</code>.
-</details>
-
-<details>
-<summary><strong>14. Explain what a Deoptimization Bailout is in V8's TurboFan.</strong></summary>
-TurboFan generates optimized machine code based on speculative assumptions derived from Ignition's runtime type feedback. If a function that was previously called only with integers is suddenly called with a string, TurboFan's assumptions are violated. It performs a deoptimization bailout: it halts execution of the machine code, reconstructs the interpreted stack frame, and falls back to the Ignition bytecode interpreter.
-</details>
-
-<details>
-<summary><strong>15. How does Node.js handle uncaught exceptions and unhandled promise rejections?</strong></summary>
-Uncaught exceptions trigger <code>process.on('uncaughtException')</code>. The process is now in an undefined, corrupt state and must log the error and terminate (<code>process.exit(1)</code>). Unhandled rejections trigger <code>process.on('unhandledRejection')</code>; in modern Node.js, unhandled rejections terminate the process by default (<code>--unhandled-rejections=strict</code>).
-</details>
-
-<details>
-<summary><strong>16. What is the purpose of <code>crypto.timingSafeEqual()</code> and what vulnerability does it prevent?</strong></summary>
-Standard string equality (<code>a === b</code>) returns <code>false</code> at the first mismatched byte, causing execution time to vary based on how many leading characters match. Attackers exploit this via timing attacks to deduce secrets byte-by-byte. <code>crypto.timingSafeEqual()</code> compares byte buffers in constant time, executing the exact same number of CPU cycles regardless of match position.
-</details>
-
-<details>
-<summary><strong>17. What is Prototype Pollution and how do you protect a Node.js application from it?</strong></summary>
-Prototype pollution occurs when user-controlled input can modify <code>Object.prototype</code> (often via recursive deep merges that accept keys like <code>__proto__</code> or <code>constructor.prototype</code>). Defenses: (1) validate/strip sensitive keys before merging, (2) use <code>Object.create(null)</code> for dictionary maps, and (3) freeze the prototype using <code>Object.freeze(Object.prototype)</code>.
-</details>
-
-<details>
-<summary><strong>18. How does <code>spawn</code> differ from <code>exec</code> in the <code>child_process</code> module?</strong></summary>
-<code>spawn()</code> streams data via <code>stdout</code> and <code>stderr</code> streams without buffering, making it suitable for large data volumes and long-running processes. <code>exec()</code> spawns a shell and buffers the entire output into memory up to a <code>maxBuffer</code> limit (default 1MB), risking buffer overflow errors if large output is produced.
-</details>
-
-<details>
-<summary><strong>19. What is Event Loop Lag and how do you measure it in production?</strong></summary>
-Event loop lag is the delay between when an asynchronous callback is scheduled to run and when it actually gets executed on the main thread, caused by long-running synchronous JavaScript blocking the call stack. It is measured via <code>perf_hooks.monitorEventLoopDelay()</code>.
-</details>
-
-<details>
-<summary><strong>20. Explain the difference between RSS, Heap Total, and Heap Used in process.memoryUsage().</strong></summary>
-- <strong>RSS (Resident Set Size)</strong>: Total physical RAM allocated to the process by the OS, including V8 heap, C++ native memory, code space, and off-heap Buffers.
-- <strong>Heap Total</strong>: Total memory allocated by V8 for the JavaScript heap.
-- <strong>Heap Used</strong>: Memory currently occupied by active JavaScript objects, strings, and closures.
-</details>
-
-<details>
-<summary><strong>21. What is the purpose of Node-API (formerly N-API)?</strong></summary>
-Node-API is an ABI-stable C API for building native Node.js C/C++ addons. Because it is Application Binary Interface (ABI) stable, compiled native addons do not need to be recompiled when upgrading between major Node.js versions.
-</details>
-
-<details>
-<summary><strong>22. What is the difference between <code>dns.lookup()</code> and <code>dns.resolve()</code>?</strong></summary>
-<code>dns.lookup()</code> calls the OS C-library function <code>getaddrinfo()</code> synchronously on the Libuv thread pool; it reads <code>/etc/hosts</code> and OS DNS configurations. <code>dns.resolve()</code> uses the <code>c-ares</code> library to make true asynchronous network queries directly over the network, completely bypassing the thread pool.
-</details>
-
-<details>
-<summary><strong>23. How does V8 optimize strings via ConsString and SlicedString?</strong></summary>
-Instead of copying bytes when concatenating strings, V8 creates a <strong>ConsString</strong>: a tree node referencing the two parent string pointers. When taking a substring, V8 creates a <strong>SlicedString</strong> pointing to the original string with an offset and length, avoiding memory allocation.
-</details>
-
-<details>
-<summary><strong>24. What is a Retaining Path in a V8 Heap Snapshot?</strong></summary>
-The chain of object references that connects an object in memory back to a Garbage Collection Root (e.g. global window/globalThis, current stack frame, or native context). An object cannot be collected by GC as long as at least one retaining path exists.
-</details>
-
-<details>
-<summary><strong>25. What causes ReDoS (Regular Expression Denial of Service) in Node.js?</strong></summary>
-Regular expressions with nested quantifiers (e.g. <code>(a+)+$</code>) applied to non-matching inputs trigger catastrophic backtracking in non-linear NFA engines. The engine tests every permutation of group boundaries, consuming 100% CPU on the main thread and freezing the entire event loop.
-</details>
-
-<details>
-<summary><strong>26. How do you implement graceful shutdown in a Node.js web server?</strong></summary>
-1. Intercept process termination signals (<code>SIGTERM</code>, <code>SIGINT</code>).
-2. Stop accepting new incoming connections: <code>server.close()</code>.
-3. Keep track of active in-flight requests and wait for them to finish.
-4. Set a timeout threshold (e.g. 10s) after which to force-kill: <code>process.exit(1)</code>.
-5. Close database connection pools, message broker consumers, and open file handles.
-6. Exit with code 0: <code>process.exit(0)</code>.
-</details>
-
-<details>
-<summary><strong>27. What is the difference between CommonJS (CJS) and ECMAScript Modules (ESM) in Node.js?</strong></summary>
-CJS uses synchronous <code>require()</code>, dynamic exports at runtime, and exposes <code>__dirname</code> and <code>__filename</code>. ESM uses asynchronous static <code>import</code>, evaluates top-level <code>await</code>, has strict static tree-shaking capabilities, and uses <code>import.meta.url</code> instead of <code>__dirname</code>.
-</details>
-
-<details>
-<summary><strong>28. What is Maglev in V8?</strong></summary>
-Maglev is V8's mid-tier optimizing compiler introduced to bridge Sparkplug (fast baseline) and TurboFan (high optimization). It generates machine code significantly faster than TurboFan while executing close to TurboFan performance, smoothing out compilation spikes.
-</details>
-
-<details>
-<summary><strong>29. How does <code>Atomics.wait()</code> and <code>Atomics.notify()</code> work in worker threads?</strong></summary>
-<code>Atomics.wait(int32Array, index, expectedValue)</code> puts the calling worker thread to sleep if the value at the index matches expectedValue. <code>Atomics.notify(int32Array, index, count)</code> wakes up the specified number of waiting threads. Note that <code>Atomics.wait()</code> cannot be called on the main thread.
-</details>
-
-<details>
-<summary><strong>30. Why should you avoid synchronous JSON.parse and JSON.stringify on large payloads?</strong></summary>
-JSON parsing and serialization run synchronously on V8's main thread. Parsing a 50MB JSON string blocks the event loop for hundreds of milliseconds, dropping requests and stalling timers. Use streaming JSON parsers (e.g. <code>JSONStream</code>) for high-volume data.
-</details>
-
-<details>
-<summary><strong>31. What is the difference between <code>Buffer.from()</code> and <code>Buffer.alloc()</code>?</strong></summary>
-<code>Buffer.alloc(size)</code> creates a zero-initialized buffer of the specified length. <code>Buffer.from()</code> creates a new buffer containing a copy of the provided array, string, ArrayBuffer, or buffer data.
-</details>
-
-<details>
-<summary><strong>32. What is the purpose of the <code>--max-old-space-size</code> flag?</strong></summary>
-Specifies the maximum memory limit in megabytes for V8's Old Space before an out-of-memory error occurs. By default in 64-bit systems it is ~2GB; on production servers with abundant RAM, it is commonly set to 4096 or 8192 MB.
-</details>
-
-<details>
-<summary><strong>33. What is the role of the Close Callbacks phase in Libuv?</strong></summary>
-It handles the destruction of socket handles and process resources when handles are closed abruptly (e.g. <code>socket.destroy()</code>). Callbacks registered via <code>socket.on('close')</code> are executed in this phase.
-</details>
-
-<details>
-<summary><strong>34. How does Node.js share a port across multiple processes in cluster mode?</strong></summary>
-In cluster mode, the primary process binds to the TCP port. When worker processes invoke <code>server.listen()</code>, the cluster module intercepts the call and passes the underlying OS socket handle/file descriptor from the primary to the workers via IPC.
-</details>
-
-<details>
-<summary><strong>35. What is the difference between <code>fs.promises</code> and traditional callback <code>fs</code>?</strong></summary>
-<code>fs.promises</code> returns native JavaScript Promises that resolve when Libuv thread pool operations finish, allowing clean <code>async/await</code> syntax. Both still execute asynchronously on the underlying Libuv worker thread pool.
-</details>
-
-<details>
-<summary><strong>36. Why is <code>fs.readFileSync()</code> generally banned in HTTP request handlers?</strong></summary>
-It blocks the entire JavaScript thread synchronously for the duration of the disk read, preventing the event loop from handling any incoming network packets, HTTP requests, or timer callbacks for all users.
-</details>
-
-<details>
-<summary><strong>37. What is the structured clone algorithm?</strong></summary>
-A serialization algorithm used by Node.js <code>worker_threads</code> (and browser Web Workers) to clone complex JavaScript objects (including circular references, Maps, Sets, Dates, ArrayBuffers) across thread boundaries.
-</details>
-
-<details>
-<summary><strong>38. What is the Idle / Prepare phase in Libuv?</strong></summary>
-An internal Libuv phase that runs before the Poll phase on every tick to perform engine housekeeping, updating internal timestamps and preparing file descriptor sets for the upcoming OS poll.
-</details>
-
-<details>
-<summary><strong>39. How do you profile an active production Node.js process without restarting it?</strong></summary>
-By sending the <code>SIGUSR1</code> signal to the process: <code>kill -USR1 <pid></code>. This activates the Node.js V8 inspector on port 9229 without interrupting execution, allowing a developer to attach Chrome DevTools remotely.
-</details>
-
-<details>
-<summary><strong>40. What is the Generational Hypothesis in garbage collection?</strong></summary>
-The empirical observation that the vast majority of allocated objects have very short lifespans (they die shortly after allocation). V8 exploits this by placing new objects in a small New Space (Scavenger) that collects garbage rapidly without having to scan the entire heap.
-</details>
-
----
-
-## 7. Stage 7: Interactive Sandbox & Platform Reference
-
-### Production Cheat Sheet & Operational Runbook
-
-### Key Node.js CLI Flags
-```bash
-# Memory configuration
-node --max-old-space-size=4096 dist/server.js
-
-# V8 Garbage collection trace logging
-node --trace-gc dist/server.js
-
-# Remote debugging inspector
-node --inspect=0.0.0.0:9229 dist/server.js
-
-# Source maps support
-node --enable-source-maps dist/server.js
+```mermaid
+flowchart TD
+    subgraph CJS["CommonJS (CJS)"]
+        C1["Synchronous Resolution"] --> C2["require() executed at runtime"]
+        C2 --> C3["module.exports object mutation"]
+        C3 --> C4["No top-level await"]
+    end
+    subgraph ESM["ECMAScript Modules (ESM)"]
+        E1["Asynchronous Static Parsing"] --> E2["import statements parsed before execution"]
+        E2 --> E3["Live read-only bindings"]
+        E3 --> E4["Top-level await supported"]
+    end
 ```
 
-### Essential Process Lifecycle Signals
-```typescript
-// Graceful shutdown listener
-process.on('SIGTERM', () => {
-  console.log('Received SIGTERM. Closing server...');
-  server.close(() => process.exit(0));
-});
+| Dimension | CommonJS (CJS) | ES Modules (ESM) |
+| :--- | :--- | :--- |
+| **Loading Mode** | Synchronous (blocking) | Asynchronous compilation |
+| **Top-Level Await** | Unsupported | Fully supported (`await db.connect()`) |
+| **Dynamic Imports** | `require(dynamicPath)` | `await import(dynamicPath)` |
+| **Identifiers** | `__dirname`, `__filename`, `exports` | `import.meta.url`, `import.meta.dirname` (Node 20.11+) |
+| **Tree-Shaking** | Difficult / Ineffective | Native static analysis support |
 
-// Guard against unhandled asynchronous promise rejections
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
-});
+### 3.2 Native TypeScript Execution (`--experimental-strip-types`)
+Starting in Node.js 22.6+, Node can execute `.ts` TypeScript files directly without `ts-node`, `tsx`, or a manual `tsc` build step by stripping type annotations in memory using SWC:
+
+```bash
+# Execute TypeScript directly with zero build tools!
+node --experimental-strip-types src/server.ts
+```
+
+### 3.3 Built-in Environment File Loading (`--env-file`)
+Node.js 20.6+ eliminates the need for the third-party `dotenv` package:
+
+```bash
+# Load environment variables from .env file automatically
+node --env-file=.env --env-file=.env.local server.js
+```
+
+### 3.4 Native File Watcher (`node --watch`)
+Node.js 18.11+ natively watches files and restarts processes on change without `nodemon`:
+
+```bash
+# Restart server automatically when any file changes
+node --watch --watch-path=src/ src/index.js
 ```
 
 ---
 
-## Quickstart & Interactive Testing
+## 4. Stage 4: Production Frameworks, ORMs & Data Pipelines
 
-### Prerequisites
-- Node.js 20.x or 22.x LTS
-- npm 9+ or 10+
+### 4.1 Framework Benchmark: Express 5 vs Fastify vs NestJS
+Choosing the right framework dictates throughput, architecture, and developer ergonomics:
 
-### Installation & Execution
+```mermaid
+flowchart TD
+    Req["Incoming HTTP Request"] --> Router
+    Router --> Fastify["Fastify (Find-My-Way Radix Tree + Ajv Schema Compilation)<br/>~75,000 req/sec"]
+    Router --> Express["Express 5 (RegExp linear matching + async error handling)<br/>~15,000 req/sec"]
+    Router --> Nest["NestJS (Angular-style Dependency Injection & TS Decorators)<br/>~25,000 req/sec (Fastify adapter)"]
+```
+
+| Feature | Express 5 | Fastify | NestJS |
+| :--- | :--- | :--- | :--- |
+| **Throughput (req/sec)** | Moderate (~15k) | Extremely High (~75k) | Depends on engine (Express or Fastify) |
+| **JSON Serialization** | Standard `JSON.stringify` | Fast JSON Stringify (Schema JIT) | Configurable |
+| **Validation** | Third-party (Zod, Joi) | Built-in Ajv JSON Schema | Class-validator decorators |
+| **Architecture** | Unopinionated middleware | Plugin architecture with encapsulation | Enterprise Modular DI (Controllers/Services) |
+
+#### Fastify High-Throughput Implementation with Schema Validation
+```javascript
+import Fastify from 'fastify';
+
+const fastify = Fastify({ logger: true });
+
+// Schema compiles to high-performance JIT serialization code
+const userSchema = {
+  body: {
+    type: 'object',
+    required: ['email', 'password'],
+    properties: {
+      email: { type: 'string', format: 'email' },
+      password: { type: 'string', minLength: 8 }
+    }
+  },
+  response: {
+    201: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        email: { type: 'string' }
+      }
+    }
+  }
+};
+
+fastify.post('/api/users', { schema: userSchema }, async (request, reply) => {
+  const { email } = request.body;
+  reply.code(201).send({ id: 'usr_101', email });
+});
+
+await fastify.listen({ port: 3000, host: '0.0.0.0' });
+```
+
+---
+
+## 5. Stage 5: Enterprise Security, Memory Leaks & Reliability
+
+### 5.1 Memory Leak Profiling: Chrome DevTools & Heap Snapshots
+Common Node.js memory leaks include:
+1. **Accidental Global Variables**: Storing items in global arrays or Maps without eviction.
+2. **Dangling Event Listeners**: Adding listeners in request handlers without calling `removeListener()`.
+3. **Closure Scope Retention**: Closures holding references to large buffers or request objects.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Engineer as SRE Engineer
+    participant Node as Node.js Process (Port 9229)
+    participant Chrome as Chrome DevTools (chrome://inspect)
+
+    Engineer->>Node: node --inspect server.js
+    Engineer->>Chrome: Connect to Remote Target
+    Engineer->>Chrome: Take Heap Snapshot 1 (Baseline)
+    Engineer->>Node: Execute 1,000 synthetic HTTP requests (Apache Bench)
+    Engineer->>Chrome: Take Heap Snapshot 2 (Under Load)
+    Chrome->>Chrome: Comparison View (Identify objects allocated between Snapshot 1 and 2)
+    Note over Chrome: Spot detached closures & runaway Map sizes!
+```
+
+### 5.2 Graceful Shutdown & Zero-Downtime Signal Handling
+When deploying on Kubernetes or Docker, processes receive `SIGTERM` signals before being terminated. A robust graceful shutdown drains in-flight requests and closes database connections cleanly:
+
+```javascript
+import http from 'node:http';
+
+const server = http.createServer((req, res) => {
+  setTimeout(() => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Processed transaction');
+  }, 2000);
+});
+
+server.listen(3000);
+
+let isShuttingDown = false;
+
+function gracefulShutdown(signal) {
+  console.log(`Received ${signal}. Initiating graceful shutdown...`);
+  isShuttingDown = true;
+
+  // 1. Stop accepting new connections
+  server.close(async () => {
+    console.log('HTTP server closed. In-flight requests drained.');
+
+    try {
+      // 2. Disconnect database connection pools & Redis clients
+      // await db.disconnect();
+      // await redis.quit();
+      console.log('Database connections closed cleanly.');
+      process.exit(0);
+    } catch (err) {
+      console.error('Error during teardown:', err);
+      process.exit(1);
+    }
+  });
+
+  // Force shutdown if connections do not drain within 10 seconds
+  setTimeout(() => {
+    console.error('Graceful shutdown timeout exceeded. Forcing exit (SIGKILL)...');
+    process.exit(1);
+  }, 10000).unref(); // unref prevents timeout from keeping process alive
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+```
+
+---
+
+## 6. Stage 6: End-to-End Enterprise Reference Implementations
+
+### 6.1 Project 1: High-Performance Streaming File Server
+Below is an end-to-end streaming file server supporting HTTP Range requests (video/audio streaming) and dynamic Gzip compression:
+
+```javascript
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import zlib from 'node:zlib';
+import { pipeline } from 'node:stream';
+
+const PUBLIC_DIR = path.resolve('public');
+
+const server = http.createServer((req, res) => {
+  const safePath = path.normalize(path.join(PUBLIC_DIR, req.url)).replace(/^(\.\.[\/\\])+/, '');
+
+  if (!fs.existsSync(safePath) || fs.statSync(safePath).isDirectory()) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('File Not Found');
+    return;
+  }
+
+  const stat = fs.statSync(safePath);
+  const range = req.headers.range;
+
+  // Handle Range Requests (Seeking video/audio)
+  if (range) {
+    const parts = range.replace(/bytes=/, '').split('-');
+    const start = parseInt(parts[0], 10);
+    const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1;
+    const chunksize = end - start + 1;
+
+    res.writeHead(206, {
+      'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': chunksize,
+      'Content-Type': 'application/octet-stream'
+    });
+
+    fs.createReadStream(safePath, { start, end }).pipe(res);
+    return;
+  }
+
+  // Full File Stream with Gzip
+  const acceptEncoding = req.headers['accept-encoding'] || '';
+  if (acceptEncoding.includes('gzip')) {
+    res.writeHead(200, {
+      'Content-Encoding': 'gzip',
+      'Content-Type': 'text/plain'
+    });
+    pipeline(fs.createReadStream(safePath), zlib.createGzip(), res, (err) => {
+      if (err) console.error('Streaming error:', err);
+    });
+  } else {
+    res.writeHead(200, {
+      'Content-Length': stat.size,
+      'Content-Type': 'text/plain'
+    });
+    fs.createReadStream(safePath).pipe(res);
+  }
+});
+
+server.listen(8080, () => console.log('Streaming server running on :8080'));
+```
+
+
+### 6.2 Project 2: High-Concurrency Microservices Event Sourcing Gateway
+This production-grade architecture demonstrates:
+- Fastify server with compiled schema validation
+- Distributed BullMQ background queue with Redis
+- Correlation tracking across async boundaries using `AsyncLocalStorage`
+- Graceful shutdown and health check endpoints
+
+```mermaid
+flowchart LR
+    Client["Client POST /orders"] --> Fastify["Fastify Ingestion Gateway"]
+    Fastify --> ALS["AsyncLocalStorage (Assigns reqId: uuid)"]
+    ALS --> Queue["BullMQ Producer (order-processing-queue)"]
+    Queue --> Redis[("Redis Broker / In-Memory Store")]
+    Redis --> Worker["BullMQ Worker Process"]
+    Worker --> Log["Context Logger [reqId: uuid] Task Completed"]
+```
+
+```javascript
+// order-gateway.mjs
+import Fastify from 'fastify';
+import { Queue, Worker } from 'bullmq';
+import { AsyncLocalStorage } from 'node:async_hooks';
+import crypto from 'node:crypto';
+
+const als = new AsyncLocalStorage();
+const redisConnection = { host: 'localhost', port: 6379 };
+
+// 1. Initialize BullMQ Queue & Worker
+const orderQueue = new Queue('order-processing-queue', { connection: redisConnection });
+
+const orderWorker = new Worker('order-processing-queue', async (job) => {
+  const { orderId, amount, requestId } = job.data;
+  
+  // Rehydrate execution context in worker thread
+  await als.run({ requestId }, async () => {
+    console.log(`[Worker - ${requestId}] Processing payment for Order #${orderId} ($${amount})...`);
+    await new Promise(r => setTimeout(r, 200)); // Simulate payment gateway call
+    console.log(`[Worker - ${requestId}] Order #${orderId} settled successfully.`);
+  });
+}, { connection: redisConnection });
+
+// 2. Initialize Fastify Server
+const app = Fastify({ logger: false });
+
+app.addHook('onRequest', (req, reply, done) => {
+  const requestId = req.headers['x-request-id'] || crypto.randomUUID();
+  als.run({ requestId }, done);
+});
+
+app.post('/api/orders', {
+  schema: {
+    body: {
+      type: 'object',
+      required: ['orderId', 'amount'],
+      properties: {
+        orderId: { type: 'string' },
+        amount: { type: 'number', minimum: 1 }
+      }
+    }
+  }
+}, async (request, reply) => {
+  const store = als.getStore();
+  const requestId = store.requestId;
+
+  const { orderId, amount } = request.body;
+  
+  // Enqueue background job with correlation ID
+  await orderQueue.add('charge-card', { orderId, amount, requestId });
+
+  reply.status(202).send({
+    status: 'ACCEPTED',
+    message: 'Order enqueued for asynchronous processing',
+    orderId,
+    requestId
+  });
+});
+
+await app.listen({ port: 5000, host: '0.0.0.0' });
+console.log('Order Microservice Gateway listening on port 5000');
+```
+
+---
+
+### 6.3 Project 3: Real-Time Collaborative Canvas / Chat Gateway with Worker Threads
+Demonstrates raw `ws` WebSocket streaming coupled with dedicated worker threads for heavy payload encryption and room state broadcasting.
+
+```mermaid
+flowchart TD
+    BrowserA["Client Alice"] <-->|"ws://localhost:8080"| WSGateway["WebSocket Server (ws)"]
+    BrowserB["Client Bob"] <-->|"ws://localhost:8080"| WSGateway
+    WSGateway -->|"Offload Broadcast Encryption"| Worker["Worker Thread (Crypto Engine)"]
+    Worker -->|"Encrypted Frame"| WSGateway
+```
+
+```javascript
+// realtime-server.mjs
+import { WebSocketServer, WebSocket } from 'ws';
+import { createServer } from 'node:http';
+import { Worker, isMainThread, parentPort } from 'node:worker_threads';
+
+const server = createServer();
+const wss = new WebSocketServer({ server });
+
+// Map of roomId -> Set of WebSockets
+const rooms = new Map();
+
+wss.on('connection', (ws, req) => {
+  const url = new URL(req.url, 'http://localhost:8080');
+  const roomId = url.searchParams.get('room') || 'general';
+
+  if (!rooms.has(roomId)) rooms.set(roomId, new Set());
+  rooms.get(roomId).add(ws);
+  console.log(`Client joined room: ${roomId} (Total in room: ${rooms.get(roomId).size})`);
+
+  ws.on('message', (data) => {
+    // Broadcast to all other peers in the room
+    const clients = rooms.get(roomId);
+    if (clients) {
+      for (const client of clients) {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(data);
+        }
+      }
+    }
+  });
+
+  ws.on('close', () => {
+    rooms.get(roomId)?.delete(ws);
+    if (rooms.get(roomId)?.size === 0) rooms.delete(roomId);
+    console.log(`Client left room: ${roomId}`);
+  });
+});
+
+server.listen(8080, () => console.log('Real-Time Gateway listening on ws://localhost:8080'));
+```
+
+
+---
+
+## 7. Stage 7: Staff Node.js Architect Interview Handbook & Cheatsheet
+
+### 7.1 50 In-Depth Technical Interview Questions & Answers
+
+#### Q1: What is the exact execution order of the Libuv Event Loop phases?
+> **Answer**:
+> 1. Timers (`setTimeout`, `setInterval`)
+> 2. Pending Callbacks (I/O callbacks deferred from previous loop iteration)
+> 3. Idle, Prepare (Internal Libuv housekeeping)
+> 4. Poll (Calculates timeout, waits for OS I/O events, executes I/O callbacks)
+> 5. Check (`setImmediate`)
+> 6. Close Callbacks (`socket.on('close')`)
+> *Between each phase and callback*, Node drains the Microtask Queue (`process.nextTick` followed by Promise jobs).
+
+#### Q2: What is the difference between `process.nextTick()` and `setImmediate()`?
+> **Answer**:
+> - `process.nextTick()` does NOT run in the Event Loop; it executes immediately at the end of the current synchronous tick before the Event Loop advances to any other phase or callback. Recursive `process.nextTick` can starve the Event Loop of all I/O!
+> - `setImmediate()` queues a callback to run in the **Check Phase** of the Event Loop, after the Poll phase processes I/O events.
+
+#### Q3: Why does `setTimeout(fn, 0)` not always execute before `setImmediate(fn)`?
+> **Answer**:
+> In the root scope, the ordering depends on the performance of the process:
+> - If Node.js enters the event loop and the OS timer has elapsed ($\ge 1	ext{ms}$), the Timers phase executes `setTimeout` first.
+> - If the timer has not elapsed yet, Node skips Timers and reaches the Check phase, executing `setImmediate` first.
+> However, **inside any I/O callback** (e.g., `fs.readFile`), `setImmediate` is **guaranteed** to execute before `setTimeout(fn, 0)` because the Check phase immediately follows the Poll phase.
+
+#### Q4: How do you prevent thread pool starvation in Node.js?
+> **Answer**:
+> Heavy use of `crypto.pbkdf2`, `fs.readFile`, or `dns.lookup` can saturate the default 4-thread Libuv pool. To mitigate:
+> 1. Increase `UV_THREADPOOL_SIZE` up to 128 (e.g., `UV_THREADPOOL_SIZE=64 node server.js`).
+> 2. Offload CPU-heavy tasks to `worker_threads` instead of relying on the libuv thread pool.
+> 3. Use non-blocking alternatives (e.g., `dns.resolve()` instead of `dns.lookup()`).
+
+#### Q5: What is the difference between `Buffer.alloc()` and `Buffer.allocUnsafe()`?
+> **Answer**:
+> - `Buffer.alloc(size)`: Allocates memory and initializes every byte to `0`. Safe, but incurs minor initialization latency.
+> - `Buffer.allocUnsafe(size)`: Allocates raw memory without clearing previous contents. Significantly faster, but contains uninitialized memory that can leak sensitive data (passwords, TLS keys) if sent over network sockets without being overwritten.
+
+#### Q6: How does backpressure work in Node.js streams?
+> **Answer**:
+> When a writable stream cannot keep up with a readable stream, its internal buffer fills up to `highWaterMark`. When full, `writable.write(chunk)` returns `false`. Compliant readable streams pause reading (`readable.pause()`) until the writable stream flushes its buffer to the OS and emits the `'drain'` event, signaling the reader to resume.
+
+#### Q7: What is the difference between `cluster` and `worker_threads`?
+> **Answer**:
+> - `node:cluster`: Multi-process architecture. Each worker is an independent OS process with its own V8 instance, memory heap, and Event Loop. Communication occurs via IPC. Shares TCP server ports via OS socket passing.
+> - `node:worker_threads`: Multi-threaded architecture within a single OS process. Each worker runs in an isolated V8 Isolate, but threads can share memory directly via `SharedArrayBuffer` with zero IPC serialization overhead.
+
+#### Q8: What causes the "Heap out of memory" crash in Node.js and how do you diagnose it?
+> **Answer**:
+> By default, 64-bit Node.js processes cap the V8 Old Space at approximately $1.4	ext{GB}$ to $2	ext{GB}$. When memory consumption exceeds this limit, V8 aborts the process.
+> - Temporary fix: Increase memory ceiling using `--max-old-space-size=4096`.
+> - Root cause diagnosis: Trigger heap snapshots (`v8.writeHeapSnapshot()`) and analyze object allocation deltas in Chrome DevTools to locate retained closures or unbounded caches.
+
+#### Q9: What is `AsyncLocalStorage` and why is it superior to manual context passing?
+> **Answer**:
+> `AsyncLocalStorage` creates asynchronous state stores that automatically propagate across asynchronous boundaries (promises, callbacks, timers). It eliminates the anti-pattern of passing request IDs or user tokens down through dozens of function parameters ("parameter drilling"), allowing deep database clients and loggers to access request context transparently.
+
+#### Q10: How does Node.js handle uncaught exceptions and unhandled promise rejections?
+> **Answer**:
+> - `uncaughtException`: Indicates an unhandled synchronous error. The application state is corrupted and unpredictable; log the error and invoke `process.exit(1)`. Never attempt to resume normal execution!
+> - `unhandledRejection`: Emitted when a Promise rejects without a `.catch()` handler. Since Node 15, unhandled promise rejections terminate the process with exit code 1 by default (`--unhandled-rejections=throw`).
+
+#### Q11: Explain the difference between `fs.readFile()` and `fs.createReadStream()`.
+> **Answer**:
+> - `fs.readFile()`: Loads the entire file into V8 memory at once. If a file is 2GB, the process will consume 2GB of RAM and likely crash with an OOM error.
+> - `fs.createReadStream()`: Streams the file in small chunks (default 64KB `highWaterMark`), keeping RAM usage constant ($<20	ext{MB}$) regardless of file size.
+
+#### Q12: How do you prevent Regular Expression Denial of Service (ReDoS) in Node.js?
+> **Answer**:
+> ReDoS occurs when a vulnerable regex with catastrophic backtracking (e.g., `/(a+)+$/`) evaluates a malicious input string, blocking the single-threaded Event Loop for minutes.
+> - Mitigation: Avoid nested quantifiers, use linear-time regex engines (e.g., Google RE2 via `re2` npm package), and enforce execution timeouts.
+
+#### Q13: What is Prototype Pollution and how do you protect against it?
+> **Answer**:
+> Prototype Pollution occurs when untrusted user input modifies `Object.prototype`, affecting all objects in the runtime.
+> - Protection: Use `Object.create(null)` for key-value maps, freeze prototypes with `Object.freeze(Object.prototype)`, or validate incoming JSON keys to disallow `__proto__`, `constructor`, and `prototype`.
+
+#### Q14: How does `crypto.timingSafeEqual()` prevent timing attacks?
+> **Answer**:
+> Standard string comparison (`===`) terminates early as soon as the first mismatched character is detected. An attacker can measure request latency down to microseconds to guess secrets character by character. `crypto.timingSafeEqual(bufA, bufB)` executes in constant time, taking the exact same number of CPU cycles regardless of where or whether characters match.
+
+#### Q15: What is the difference between `spawn()`, `exec()`, and `execFile()` in `child_process`?
+> **Answer**:
+> - `spawn()`: Streams stdout/stderr via streams. Ideal for long-running processes or large data transfers without memory buffering.
+> - `exec()`: Spawns a subshell (`/bin/sh` or `cmd.exe`) and buffers the entire output in memory before calling a callback. Vulnerable to shell command injection!
+> - `execFile()`: Invokes an executable binary directly without spawning a subshell, making it immune to shell injection vulnerabilities.
+
+
+#### Q16: How do you measure Event Loop Lag / Delay in production?
+> **Answer**:
+> Use `perf_hooks.monitorEventLoopDelay({ resolution: 20 })`:
+> ```javascript
+> import { monitorEventLoopDelay } from 'node:perf_hooks';
+> const histogram = monitorEventLoopDelay({ resolution: 20 });
+> histogram.enable();
+> // In periodic metrics reporting:
+> console.log('Mean delay:', histogram.mean / 1e6, 'ms');
+> console.log('99th percentile delay:', histogram.percentile(99) / 1e6, 'ms');
+> ```
+> If p99 delay exceeds 50ms, synchronous CPU work is blocking the single-threaded Event Loop.
+
+#### Q17: What is the difference between `dns.lookup()` and `dns.resolve()`?
+> **Answer**:
+> - `dns.lookup()`: Uses the synchronous `getaddrinfo(3)` OS system call, which executes in the **libuv thread pool**. High volumes of `dns.lookup()` calls can saturate the 4-thread pool, starving file I/O and crypto operations.
+> - `dns.resolve()`: Uses the C-Ares asynchronous library, making direct asynchronous network queries over non-blocking UDP sockets without consuming any worker threads.
+
+#### Q18: What is V8 Code Caching and how can it accelerate Node.js cold startup?
+> **Answer**:
+> When a JavaScript file is parsed and compiled by V8, compiling it on every process restart incurs cold-start latency. Using `node:vm.Script.createCachedData()` or the `--cached-data-dir` flag allows saving the compiled bytecode to disk, reducing subsequent application startup times by up to 70%.
+
+#### Q19: What is the purpose of `process.setUncaughtExceptionCaptureCallback()`?
+> **Answer**:
+> It installs a single global error interceptor that supersedes `uncaughtException` listeners. When registered, any uncaught error is routed to this function and the standard Node.js default behavior (printing stack trace and aborting) is suppressed, allowing a clean custom emergency telemetry dump before exiting.
+
+#### Q20: How do you gracefully handle SIGUSR2 for zero-downtime cluster restarts?
+> **Answer**:
+> When the primary cluster process receives `SIGUSR2`, it iterates over its worker collection sequentially:
+> 1. Spawns a new replacement worker (`cluster.fork()`).
+> 2. Waits for the replacement worker to emit `'listening'`.
+> 3. Disconnects and kills the old worker (`oldWorker.disconnect()`).
+> 4. Repeats for the next worker, ensuring there is never a millisecond without healthy workers serving traffic.
+
+#### Q21: What is the difference between `Stream.Readable.from()` and `fs.createReadStream()`?
+> **Answer**:
+> `Readable.from(iterable)` converts any JavaScript iterable or AsyncIterable (generators, arrays, sets) into a standard Node.js Readable stream, complete with backpressure handling.
+
+#### Q22: What is the `captureRejections` option in `EventEmitter`?
+> **Answer**:
+> Introduced in Node 13.4, setting `{ captureRejections: true }` on an EventEmitter automatically catches unhandled Promise rejections inside `async` event listener functions and routes them to the emitter's `'error'` event rather than triggering an unhandled promise rejection.
+
+#### Q23: How do you achieve true CPU parallelism in Node.js?
+> **Answer**:
+> By using `node:worker_threads` (for shared-memory multi-threading) or `node:cluster` / `node:child_process` (for multi-process execution). Pure async functions (`async/await`) only interleave I/O latency; they do not run CPU calculations in parallel.
+
+#### Q24: What is the difference between `http.Agent({ keepAlive: true })` and default HTTP requests?
+> **Answer**:
+> By default, `http.request()` tears down the underlying TCP connection after each request completes. Enabling `keepAlive: true` pools open TCP connections, eliminating the 3-way TCP handshake and TLS negotiation overhead for subsequent requests to the same origin, reducing latency by up to 80%.
+
+#### Q25: How does Node.js implement the Module Resolution Algorithm in CommonJS?
+> **Answer**:
+> 1. Core modules: Loaded instantaneously if name matches (`fs`, `path`).
+> 2. File modules (`./`, `../`, `/`): Checks path, appends extensions (`.js`, `.json`, `.node`), checks directory `index.js` or `package.json` `main`.
+> 3. Package modules (`lodash`): Searches `./node_modules`, `../node_modules`, traversing upward to root filesystem until found or throws `MODULE_NOT_FOUND`.
+
+#### Q26: What is a WeakRef and FinalizationRegistry, and when should they be used in Node.js?
+> **Answer**:
+> - `WeakRef`: Holds a weak reference to an object without preventing it from being garbage collected.
+> - `FinalizationRegistry`: Registers a cleanup callback that executes when a tracked object is collected by V8 GC.
+> Used in advanced caching layers where cached objects can be evicted automatically by V8 under memory pressure.
+
+#### Q27: What is the difference between `fs.watch` and `fs.watchFile`?
+> **Answer**:
+> - `fs.watch`: Uses native OS notification APIs (Linux `inotify`, macOS `FSEvents`, Windows `ReadDirectoryChangesW`). Fast, lightweight, event-driven, but platform-inconsistent.
+> - `fs.watchFile`: Polls the file system periodically (checking `stat.mtime`). Reliable across all network filesystems (NFS), but incurs substantial CPU and disk polling overhead.
+
+#### Q28: How do you prevent prototype pollution when parsing query strings or JSON?
+> **Answer**:
+> 1. Validate object keys to disallow `__proto__`, `constructor`, and `prototype`.
+> 2. Use `Object.create(null)` for lookup maps so there is no inherited prototype chain.
+> 3. Use `Object.freeze(Object.prototype)` in security-critical environments to make prototype tampering throw an immediate error.
+
+#### Q29: What is the difference between `fs.stat()`, `fs.lstat()`, and `fs.fstat()`?
+> **Answer**:
+> - `fs.stat(path)`: Retrieves metadata of the file or directory. If path is a symbolic link, it follows the link and returns the target file's metadata.
+> - `fs.lstat(path)`: If path is a symbolic link, returns the metadata of the symbolic link itself.
+> - `fs.fstat(fd)`: Retrieves metadata directly from an open integer file descriptor.
+
+#### Q30: What is the C++ N-API (Node-API)?
+> **Answer**:
+> Node-API is an ABI-stable C/C++ API for building native binary addons in Node.js. Unlike legacy V8 C++ bindings, addons compiled against Node-API do not need to be recompiled when upgrading Node.js major versions.
+
+#### Q31: How does Node.js manage memory for Buffers vs standard V8 objects?
+> **Answer**:
+> Small buffers ($\le 8\text{KB}$) are allocated inside a shared internal 8KB ArrayBuffer pool in V8 heap memory. Large buffers ($> 8\text{KB}$) are allocated directly via C++ `malloc()` **outside the V8 heap** in system RAM, bypassing V8 garbage collection limits.
+
+#### Q32: What is the purpose of `server.maxHeadersCount` and `server.headersTimeout`?
+> **Answer**:
+> - `maxHeadersCount`: Caps incoming HTTP headers (default 2,000) to prevent hash collision DoS attacks.
+> - `headersTimeout`: Enforces a maximum duration for receiving complete HTTP request headers (default 60s), protecting the server against Slowloris attacks.
+
+#### Q33: How does Node.js resolve circular dependencies in CommonJS?
+> **Answer**:
+> When Module A requires Module B, and Module B requires Module A, Module B receives an **incomplete (partial) copy of Module A's `exports` object** evaluated up to that point. In ES Modules, circular dependencies use live bindings, but accessing uninitialized variables triggers a `ReferenceError (TDZ - Temporal Dead Zone)`.
+
+#### Q34: What is the difference between `String.prototype.normalize()` and path normalization?
+> **Answer**:
+> `path.normalize()` resolves `.` and `..` path segments and duplicate slashes. `String.prototype.normalize()` performs Unicode canonical equivalence normalization (NFC, NFD, NFKC, NFKD), critical when handling international filenames across macOS and Linux.
+
+#### Q35: What is `unref()` and `ref()` on timers and network sockets?
+> **Answer**:
+> - `timer.unref()`: Tells the Event Loop that this active timer should NOT prevent the Node.js process from exiting if it is the only task remaining.
+> - `timer.ref()`: Restores default behavior, ensuring the Event Loop stays alive until the timer expires.
+
+#### Q36: How do you implement distributed locking in Node.js?
+> **Answer**:
+> Use the **Redlock algorithm** via Redis (`ioredis`):
+> 1. Set key with unique random string and TTL: `SET resource_lock my_random_value NX PX 30000`.
+> 2. Perform business logic.
+> 3. Release lock using a Lua script that checks if value matches `my_random_value` before deleting, ensuring a process does not release a lock held by another worker after a timeout.
+
+#### Q37: What is the purpose of `process.memoryUsage()` fields?
+> **Answer**:
+> - `rss` (Resident Set Size): Total physical RAM occupied by the process.
+> - `heapTotal`: Total memory allocated by V8 for the heap.
+> - `heapUsed`: Actual memory currently utilized by JavaScript objects.
+> - `external`: Memory bound to C++ objects managed by V8 (Buffers).
+> - `arrayBuffers`: Memory allocated for ArrayBuffers and SharedArrayBuffers.
+
+#### Q38: How do you handle database connection pooling gracefully in Node.js?
+> **Answer**:
+> Instantiate a single shared `pg.Pool` or database connection manager at application startup. Set `max` connection limits based on available PostgreSQL slots. Always release clients back to the pool in a `finally` block:
+> ```javascript
+> const client = await pool.connect();
+> try {
+>   await client.query('...');
+> } finally {
+>   client.release();
+> }
+> ```
+
+#### Q39: What is the difference between `child_process.fork()` and `cluster.fork()`?
+> **Answer**:
+> - `child_process.fork('path.js')`: Spawns an arbitrary new Node.js process with an IPC communication channel.
+> - `cluster.fork()`: Specifically designed for server scaling; forks a copy of the *current script* and automatically configures OS-level TCP socket sharing across worker processes.
+
+#### Q40: What is the purpose of the `exports` field in `package.json`?
+> **Answer**:
+> The `exports` field provides strict encapsulation for modern npm packages. It specifies exact entrypoints for different environments (`import`, `require`, `types`, `default`) and completely hides private internal files from consumer `require()` calls.
+
+#### Q41: How do you trace asynchronous operations with OpenTelemetry in Node.js?
+> **Answer**:
+> Initialize the OpenTelemetry NodeSDK at the very first line of your entrypoint before any other imports. OpenTelemetry uses `AsyncLocalStorage` and monkey-patches `http`, `pg`, and `redis` to generate spans and propagate W3C Trace Context headers (`traceparent`) automatically across microservices.
+
+#### Q42: What is the difference between `ArrayBuffer`, `TypedArray`, and `Buffer`?
+> **Answer**:
+> - `ArrayBuffer`: A fixed-length raw binary data buffer in ECMAScript. Cannot be accessed or modified directly.
+> - `TypedArray` (`Uint8Array`, `Float64Array`): A view over an `ArrayBuffer` providing typed numeric indexing.
+> - `Buffer`: Node.js subclass of `Uint8Array` with additional binary encoding, slicing, and native I/O capabilities.
+
+#### Q43: What is the purpose of `stream.finished()`?
+> **Answer**:
+> `stream.finished(stream, callback)` provides a reliable notification when a stream has completely finished, closed, or encountered an error. It handles both modern and legacy streams and guarantees cleanup without missing premature socket termination events.
+
+#### Q44: What is the difference between `crypto.randomBytes()` and `Math.random()`?
+> **Answer**:
+> - `Math.random()`: Pseudo-random number generator (PRNG). Completely deterministic and predictable; **never use for security tokens, passwords, or session IDs!**
+> - `crypto.randomBytes()`: Cryptographically Secure Pseudo-Random Number Generator (CSPRNG) seeded directly from operating system entropy (`/dev/urandom` on Unix, CryptGenRandom on Windows).
+
+#### Q45: How do you inspect a running Node.js process without restarting it?
+> **Answer**:
+> Send the `SIGUSR1` signal to the process PID:
+> ```bash
+> kill -SIGUSR1 <PID>
+> ```
+> Node.js activates the V8 Inspector dynamically on port 9229 without interrupting running transactions, allowing Chrome DevTools connection.
+
+#### Q46: What is the difference between `setImmediate` and `setTimeout(fn, 1)`?
+> **Answer**:
+> `setTimeout(fn, 1)` registers a timer with the OS. Due to timer quantization and clock drift, it executes after at least $1\text{ms}$ in the Timers phase. `setImmediate()` queues directly into the Check phase and executes as soon as the current Poll phase finishes, with zero OS timer overhead.
+
+#### Q47: What is the purpose of `node:diagnostics_channel`?
+> **Answer**:
+> `diagnostics_channel` is an internal publish-subscribe channel mechanism designed for APM (Application Performance Monitoring) tools to publish telemetry events synchronously with near-zero overhead without monkey-patching core modules.
+
+#### Q48: How do you handle file uploads in Node.js without storing entire files in memory?
+> **Answer**:
+> Use streaming multipart parsers like **`busboy`** or **`formidable`**. As binary chunks stream from the incoming HTTP socket, pipe them directly into a file write stream or S3 multipart upload stream, keeping server RAM below 5MB.
+
+#### Q49: What is the difference between `process.exit(0)` and `process.exit(1)`?
+> **Answer**:
+> - `0`: Success status code. Informs the host OS, Docker, or Kubernetes that the process completed its mission normally.
+> - `1` (or non-zero): Error status code. Triggers container restart policies (e.g., Kubernetes `restartPolicy: OnFailure`) and alerts monitoring pipelines.
+
+#### Q50: How do you architect an enterprise Node.js microservice for 99.999% availability?
+> **Answer**:
+> 1. Stateless process model: Externalize all session and cache state to distributed Redis/PostgreSQL clusters.
+> 2. Containerized orchestration: Run multiple replicas across distinct Availability Zones in Kubernetes.
+> 3. Zero-downtime rolling updates with readiness/liveness probes and graceful shutdown hooks (`SIGTERM`).
+> 4. Distributed tracing and APM using OpenTelemetry and Prometheus metrics for Event Loop lag and heap utilization.
+> 5. Asynchronous job offloading via distributed message brokers (Kafka/BullMQ) to prevent blocking the Event Loop.
+
+
+---
+
+## 8. Community, Contributing & Support
+
+We welcome contributions from backend engineers worldwide! Please review our contribution guidelines before submitting pull requests.
+
+### Development Workflow
 ```bash
-# Clone the repository
+# 1. Clone your fork
 git clone https://github.com/manthanank/learn-nodejs.git
-cd learn-nodejs
 
-# Install dependencies
-npm install
+# 2. Run automated test suite using native Node.js test runner
+node --test tests/*.test.mjs
 
-# Run Vitest test suite (10 comprehensive tests)
+# 3. Format and lint
 npm test
-
-# Build TypeScript output
-npm run build
-
-# Start production server
-npm start
-# Server listening on http://localhost:3000
 ```
+
+- **Contributing Guidelines**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Code of Conduct**: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- **License**: [MIT License](LICENSE)
 
 ---
 
-## Contributing & Community
-
-Contributions are welcomed! Please review [CONTRIBUTING.md](CONTRIBUTING.md) and adhere to our [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+<div align="center">
+  <p>Maintained with precision by <b>Manthan Ank</b>.</p>
+  <a href="https://www.buymeacoffee.com/manthanank">
+    <img src="public/bmc-button.svg" alt="Buy Me A Coffee" width="180">
+  </a>
+</div>
