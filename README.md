@@ -1,70 +1,111 @@
-# Exhaustive Production-Grade Node.js Masterclass: From Beginner to Staff Platform Architect
+# Learn Node.js 🟩
 
-[![CI Pipeline](https://github.com/manthanank/learn-nodejs/actions/workflows/ci.yml/badge.svg)](https://github.com/manthanank/learn-nodejs/actions)
+<div align="center">
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/Node.js-22.x%20LTS-339933.svg?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![V8 Engine](https://img.shields.io/badge/V8-Ignition%20%26%20TurboFan-4285F4.svg?logo=googlechrome)](https://v8.dev/)
+[![Asynchronous I/O](https://img.shields.io/badge/Libuv-Event%20Loop-orange.svg)](https://libuv.org/)
+[![TypeScript Native](https://img.shields.io/badge/TypeScript---experimental--strip--types-blue.svg?logo=typescript)](https://nodejs.org/)
+[![Production Ready](https://img.shields.io/badge/Status-Enterprise%20Grade-brightgreen.svg)](https://github.com/TheLearningHubOrg/learn-nodejs)
 
-Welcome to the definitive, encyclopedic masterclass on **Node.js, V8 Runtime Internals, and High-Performance Backend Engineering**. This guide is crafted for software engineers, backend architects, DevOps practitioners, and systems developers. It covers every single native module, CLI flag, V8 memory allocation mechanic, asynchronous stream pipeline, worker thread concurrency pattern, and multi-core scaling architecture—with standalone runnable code examples and line-by-line pedagogical breakdown tables for every single topic.
+**An exhaustive, production-grade masterclass on Node.js, V8 runtime internals, and high-performance backend engineering.**  
+Master libuv event loop phases, V8 memory allocation & GC tuning, asynchronous stream pipelines & backpressure, worker thread concurrency, native TypeScript stripping, and multi-core cluster architectures.
+
+[Stage 1: Architecture](#1-stage-1-architecture-v8-engine--libuv-event-loop) • [Stage 2: Native Modules](#2-stage-2-core-native-modules--complete-api-encyclopedia) • [Stage 3: Module Systems](#3-stage-3-module-systems-tooling--modern-node-22-features) • [Stage 4: Frameworks & ORMs](#4-stage-4-production-frameworks-orms--data-pipelines) • [Stage 5: Security & Performance](#5-stage-5-enterprise-security-memory-leaks--reliability) • [Stage 6: Enterprise Projects](#6-stage-6-end-to-end-enterprise-reference-implementations) • [Stage 7: Staff Handbook](#7-stage-7-staff-nodejs-architect-interview-handbook--cheatsheet)
+
+<br/>
+
+<a href="https://www.buymeacoffee.com/manthanank">
+  <img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee" alt="Buy Me A Coffee" width="180">
+</a>
+
+</div>
 
 ---
 
-## Table of Contents
-1. [Stage 1: Architecture, V8 Engine & Libuv Event Loop](#1-stage-1-architecture-v8-engine--libuv-event-loop)
-   - 1.1 Node.js Runtime Architecture Overview
-   - 1.2 Google V8 Engine: Ignition, TurboFan, and JIT Optimization
-   - 1.3 V8 Memory Allocation: Call Stack, Heap, and Garbage Collection
-   - 1.4 Hidden Classes and Inline Caching
-   - 1.5 The Libuv Event Loop: The 6 Phases in Depth
-   - 1.6 Microtasks vs Macrotasks: `process.nextTick()` vs `Promise`
-   - 1.7 Libuv Thread Pool: `UV_THREADPOOL_SIZE` & Non-Blocking OS I/O
-2. [Stage 2: Core Native Modules & Complete API Encyclopedia](#2-stage-2-core-native-modules--complete-api-encyclopedia)
-   - 2.1 File System (`node:fs` & `node:fs/promises`)
-   - 2.2 Path Management (`node:path`)
-   - 2.3 Operating System & Hardware (`node:os`)
-   - 2.4 Event-Driven Architecture (`node:events`)
-   - 2.5 Binary Data & Buffers (`node:buffer`)
-   - 2.6 Stream Processing & Backpressure (`node:stream`)
-   - 2.7 HTTP & HTTPS Networking (`node:http`, `node:https`)
-   - 2.8 HTTP/2 Multiplexing (`node:http2`)
-   - 2.9 Cryptography & Security (`node:crypto`)
-   - 2.10 Process Management & IPC (`node:child_process`)
-   - 2.11 Multi-Threaded Parallelism (`node:worker_threads`)
-   - 2.12 Multi-Process Clustering (`node:cluster`)
-   - 2.13 Raw Networking: TCP & UDP (`node:net`, `node:dgram`)
-   - 2.14 Data Compression (`node:zlib`)
-   - 2.15 Asynchronous Execution Context (`node:async_hooks` & `AsyncLocalStorage`)
-   - 2.16 Performance Hooks & Metrics (`node:perf_hooks`)
-   - 2.17 Diagnostics & V8 Profiling (`node:diagnostics_channel`, `node:v8`)
-   - 2.18 Native Test Runner (`node:test` & `node:assert`)
-   - 2.19 Utility Functions (`node:util`)
-3. [Stage 3: Module Systems, Tooling & Modern Node 22+ Features](#3-stage-3-module-systems-tooling--modern-node-22-features)
-   - 3.1 CommonJS vs ES Modules: Deep Architectural Comparison
-   - 3.2 The `package.json` Exports & Imports Map
-   - 3.3 Native TypeScript Execution (`--experimental-strip-types`)
-   - 3.4 Built-in Environment File Loading (`--env-file`)
-   - 3.5 Native File Watcher (`node --watch`)
-   - 3.6 Essential Node.js CLI Flags & Environment Variables
-4. [Stage 4: Production Frameworks, ORMs & Data Pipelines](#4-stage-4-production-frameworks-orms--data-pipelines)
-   - 4.1 Framework Benchmark: Express 5 vs Fastify vs NestJS
-   - 4.2 Fastify High-Throughput Schema Validation with Ajv
-   - 4.3 Database Access: Prisma vs Drizzle vs Native `pg` Pool
-   - 4.4 Distributed Caching with Redis & ioredis
-   - 4.5 Background Job Processing with BullMQ
-5. [Stage 5: Enterprise Security, Memory Leaks & Reliability](#5-stage-5-enterprise-security-memory-leaks--reliability)
-   - 5.1 Memory Leak Profiling: Chrome DevTools & Heap Snapshots
-   - 5.2 Detecting and Mitigating Event Loop Lag
-   - 5.3 Prototype Pollution Prevention
-   - 5.4 Regular Expression Denial of Service (ReDoS) Protection
-   - 5.5 Graceful Shutdown & Zero-Downtime Signal Handling
-6. [Stage 6: End-to-End Enterprise Reference Implementations](#6-stage-6-end-to-end-enterprise-reference-implementations)
-   - 6.1 Project 1: High-Performance Gzip Streaming File Server
-   - 6.2 Project 2: Multi-Threaded Heavy Compute Worker Pool API
-   - 6.3 Project 3: Distributed Microservice with AsyncLocalStorage Tracing
-7. [Stage 7: Staff Node.js Architect Interview Handbook & Cheatsheet](#7-stage-7-staff-nodejs-architect-interview-handbook--cheatsheet)
-   - 7.1 50 In-Depth Technical Interview Questions & Answers
-   - 7.2 Native API Quick-Reference Cheatsheet
-8. [Community, Contributing & Support](#8-community-contributing--support)
+## 🗺️ 7-Stage Pedagogical Roadmap
+
+```mermaid
+flowchart LR
+    S1["Stage 1: V8 & Libuv Engine"] --> S2["Stage 2: Native Modules API"]
+    S2 --> S3["Stage 3: Node 22+ & Tooling"]
+    S3 --> S4["Stage 4: Frameworks & ORMs"]
+    S4 --> S5["Stage 5: Security & Memory Leaks"]
+    S5 --> S6["Stage 6: Reference Projects"]
+    S6 --> S7["Stage 7: Staff Architect Handbook"]
+```
+
+| Stage | Focus Domain | Core Concepts & Production Outcomes |
+| :--- | :--- | :--- |
+| **Stage 1** | **Runtime Architecture & Libuv Event Loop** | V8 Ignition & TurboFan, Heap/Call stack, GC generations, 6 libuv loop phases, microtasks (`process.nextTick` vs `Promise`), thread pool. |
+| **Stage 2** | **Core Native Modules Encyclopedia** | `node:fs/promises`, `node:stream` backpressure pipelines, `node:http2`, `node:crypto`, `worker_threads`, `cluster`, `AsyncLocalStorage`. |
+| **Stage 3** | **Module Systems & Node 22+ Modern Features** | CommonJS vs ESM interop, package exports/imports map, native type stripping (`--experimental-strip-types`), `--env-file`, `--watch`. |
+| **Stage 4** | **Production Frameworks & Data Pipelines** | Express 5 vs Fastify vs NestJS benchmarks, Ajv high-throughput validation, Prisma vs Drizzle vs pg pool, BullMQ job queues. |
+| **Stage 5** | **Enterprise Security & Reliability** | Chrome DevTools heap profiling, event loop lag monitoring, ReDoS protection, prototype pollution mitigation, graceful shutdown signals. |
+| **Stage 6** | **End-to-End Enterprise Implementations** | Gzip streaming file server, multi-threaded CPU worker pool, distributed microservice with OpenTelemetry & AsyncLocalStorage tracing. |
+| **Stage 7** | **Staff Architect Interview Handbook & Cheatsheet** | 50 in-depth staff-level interview scenarios, native API cheatsheet, production configuration presets. |
+
+---
+
+## 📋 Table of Contents
+
+- [1. Stage 1: Architecture, V8 Engine & Libuv Event Loop](#1-stage-1-architecture-v8-engine--libuv-event-loop)
+  - [1.1 Node.js Runtime Architecture Overview](#11-nodejs-runtime-architecture-overview)
+  - [1.2 Google V8 Engine: Ignition, TurboFan, and JIT Optimization](#12-google-v8-engine-ignition-turbofan-and-jit-optimization)
+  - [1.3 V8 Memory Allocation: Call Stack, Heap, and Garbage Collection](#13-v8-memory-allocation-call-stack-heap-and-garbage-collection)
+  - [1.4 Hidden Classes and Inline Caching](#14-hidden-classes-and-inline-caching)
+  - [1.5 The Libuv Event Loop: The 6 Phases in Depth](#15-the-libuv-event-loop-the-6-phases-in-depth)
+  - [1.6 Microtasks vs Macrotasks: process.nextTick() vs Promise](#16-microtasks-vs-macrotasks-processnexttick-vs-promise)
+  - [1.7 Libuv Thread Pool: UV_THREADPOOL_SIZE & Non-Blocking OS I/O](#17-libuv-thread-pool-uv_threadpool_size--non-blocking-os-io)
+- [2. Stage 2: Core Native Modules & Complete API Encyclopedia](#2-stage-2-core-native-modules--complete-api-encyclopedia)
+  - [2.1 File System (node:fs & node:fs/promises)](#21-file-system-nodefs--nodefspromises)
+  - [2.2 Path Management (node:path)](#22-path-management-nodepath)
+  - [2.3 Operating System & Hardware (node:os)](#23-operating-system--hardware-nodeos)
+  - [2.4 Event-Driven Architecture (node:events)](#24-event-driven-architecture-nodeevents)
+  - [2.5 Binary Data & Buffers (node:buffer)](#25-binary-data--buffers-nodebuffer)
+  - [2.6 Stream Processing & Backpressure (node:stream)](#26-stream-processing--backpressure-nodestream)
+  - [2.7 HTTP & HTTPS Networking (node:http, node:https)](#27-http--https-networking-nodehttp-nodehttps)
+  - [2.8 HTTP/2 Multiplexing (node:http2)](#28-http2-multiplexing-nodehttp2)
+  - [2.9 Cryptography & Security (node:crypto)](#29-cryptography--security-nodecrypto)
+  - [2.10 Process Management & IPC (node:child_process)](#210-process-management--ipc-nodechild_process)
+  - [2.11 Multi-Threaded Parallelism (node:worker_threads)](#211-multi-threaded-parallelism-nodeworker_threads)
+  - [2.12 Multi-Process Clustering (node:cluster)](#212-multi-process-clustering-nodecluster)
+  - [2.13 Raw Networking: TCP & UDP (node:net, node:dgram)](#213-raw-networking-tcp--udp-nodenet-nodedgram)
+  - [2.14 Data Compression (node:zlib)](#214-data-compression-nodezlib)
+  - [2.15 Asynchronous Execution Context (node:async_hooks & AsyncLocalStorage)](#215-asynchronous-execution-context-nodeasync_hooks--asynclocalstorage)
+  - [2.16 Performance Hooks & Metrics (node:perf_hooks)](#216-performance-hooks--metrics-nodeperf_hooks)
+  - [2.17 Diagnostics & V8 Profiling (node:diagnostics_channel, node:v8)](#217-diagnostics--v8-profiling-nodediagnostics_channel-nodev8)
+  - [2.18 Native Test Runner (node:test & node:assert)](#218-native-test-runner-nodetest--nodeassert)
+  - [2.19 Utility Functions (node:util)](#219-utility-functions-nodeutil)
+- [3. Stage 3: Module Systems, Tooling & Modern Node 22+ Features](#3-stage-3-module-systems-tooling--modern-node-22-features)
+  - [3.1 CommonJS vs ES Modules: Deep Architectural Comparison](#31-commonjs-vs-es-modules-deep-architectural-comparison)
+  - [3.2 The package.json Exports & Imports Map](#32-the-packagejson-exports--imports-map)
+  - [3.3 Native TypeScript Execution (--experimental-strip-types)](#33-native-typescript-execution---experimental-strip-types)
+  - [3.4 Built-in Environment File Loading (--env-file)](#34-built-in-environment-file-loading---env-file)
+  - [3.5 Native File Watcher (node --watch)](#35-native-file-watcher-node---watch)
+  - [3.6 Essential Node.js CLI Flags & Environment Variables](#36-essential-nodejs-cli-flags--environment-variables)
+- [4. Stage 4: Production Frameworks, ORMs & Data Pipelines](#4-stage-4-production-frameworks-orms--data-pipelines)
+  - [4.1 Framework Benchmark: Express 5 vs Fastify vs NestJS](#41-framework-benchmark-express-5-vs-fastify-vs-nestjs)
+  - [4.2 Fastify High-Throughput Schema Validation with Ajv](#42-fastify-high-throughput-schema-validation-with-ajv)
+  - [4.3 Database Access: Prisma vs Drizzle vs Native pg Pool](#43-database-access-prisma-vs-drizzle-vs-native-pg-pool)
+  - [4.4 Distributed Caching with Redis & ioredis](#44-distributed-caching-with-redis--ioredis)
+  - [4.5 Background Job Processing with BullMQ](#45-background-job-processing-with-bullmq)
+- [5. Stage 5: Enterprise Security, Memory Leaks & Reliability](#5-stage-5-enterprise-security-memory-leaks--reliability)
+  - [5.1 Memory Leak Profiling: Chrome DevTools & Heap Snapshots](#51-memory-leak-profiling-chrome-devtools--heap-snapshots)
+  - [5.2 Detecting and Mitigating Event Loop Lag](#52-detecting-and-mitigating-event-loop-lag)
+  - [5.3 Prototype Pollution Prevention](#53-prototype-pollution-prevention)
+  - [5.4 Regular Expression Denial of Service (ReDoS) Protection](#54-regular-expression-denial-of-service-redos-protection)
+  - [5.5 Graceful Shutdown & Zero-Downtime Signal Handling](#55-graceful-shutdown--zero-downtime-signal-handling)
+- [6. Stage 6: End-to-End Enterprise Reference Implementations](#6-stage-6-end-to-end-enterprise-reference-implementations)
+  - [6.1 Project 1: High-Performance Gzip Streaming File Server](#61-project-1-high-performance-gzip-streaming-file-server)
+  - [6.2 Project 2: Multi-Threaded Heavy Compute Worker Pool API](#62-project-2-multi-threaded-heavy-compute-worker-pool-api)
+  - [6.3 Project 3: Distributed Microservice with AsyncLocalStorage Tracing](#63-project-3-distributed-microservice-with-asynclocalstorage-tracing)
+- [7. Stage 7: Staff Node.js Architect Interview Handbook & Cheatsheet](#7-stage-7-staff-nodejs-architect-interview-handbook--cheatsheet)
+  - [7.1 50 In-Depth Technical Interview Questions & Answers](#71-50-in-depth-technical-interview-questions--answers)
+  - [7.2 Native API Quick-Reference Cheatsheet](#72-native-api-quick-reference-cheatsheet)
+- [🤝 Community & Contributing](#8-community-contributing--support)
+- [📄 License](#license)
 
 ---
 
@@ -1856,7 +1897,7 @@ We welcome contributions from backend engineers worldwide! Please review our con
 ### Development Workflow
 ```bash
 # 1. Clone your fork
-git clone https://github.com/manthanank/learn-nodejs.git
+git clone https://github.com/TheLearningHubOrg/learn-nodejs.git
 
 # 2. Run automated test suite using native Node.js test runner
 node --test tests/*.test.mjs
