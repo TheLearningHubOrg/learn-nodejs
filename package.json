@@ -1,6 +1,6 @@
 {
   "name": "learn-nodejs",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Comprehensive enterprise curriculum, production architecture guide, and interactive runtime sandbox for Node.js 20/22 LTS, V8, Libuv, and TypeScript.",
   "type": "module",
   "main": "dist/server.js",

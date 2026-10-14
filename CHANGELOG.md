@@ -1,3 +1,12 @@
+# [2.3.0](https://github.com/manthanank/learn-nodejs/compare/v2.2.0...v2.3.0) (2026-10-14)
+
+
+### Features
+
+* standardize Node.js masterclass to unified 7-stage curriculum format ([3443d05](https://github.com/manthanank/learn-nodejs/commit/3443d05e1ff46352546e2833ae15562b0ffc9137))
+
+
+
 # [2.2.0](https://github.com/manthanank/learn-nodejs/compare/v2.1.0...v2.2.0) (2026-09-07)
 
 
@@ -31,15 +40,6 @@
 ### Features
 
 * Add code changes for new feature ([af14e79](https://github.com/manthanank/learn-nodejs/commit/af14e799eeb3f0fcee04f874622a636ebae16bcd))
-
-
-
-# [0.2.0](https://github.com/manthanank/learn-nodejs/compare/v0.1.0...v0.2.0) (2024-06-11)
-
-
-### Features
-
-* Add code changes for new feature ([d3cf2e9](https://github.com/manthanank/learn-nodejs/commit/d3cf2e94ceb8e897b7a44ce6941662b800e20f79))
 
 
 
